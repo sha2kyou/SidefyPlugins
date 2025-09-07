@@ -1,39 +1,36 @@
-// Bilibili 用户视频插件 - 修复时长和缓存问题
+// Bilibili 用户视频插件 - 修复版本
 function fetchEvents(config) {
     var events = [];
 
     var mid = config.mid;
 
     var pageSize = 10;
-    if (config && config.pageSize && config.pageSize !== "undefined" &&
-        config.pageSize.toString().length > 0) {
+    if (config && config.pageSize && config.pageSize !== "undefined") {
         pageSize = config.pageSize;
     }
 
-    var cacheKey = "bilibili_videos_" + mid;
-    var cacheTimeKey = "bilibili_time_" + mid;
+    var cacheKey = "bilibili_user_videos_" + mid;
+    var cacheTimeKey = "bilibili_cache_time_" + mid;
     var cacheExpiryMinutes = 30;
 
     try {
         // 检查缓存
+        var cachedData = SideCalendar.storageGet(cacheKey);
         var cachedTime = SideCalendar.storageGet(cacheTimeKey);
-        if (cachedTime && cachedTime.length > 0) {
-            var cacheTimestamp = parseInt(cachedTime);
-            var now = Date.now();
-            var cacheAge = now - cacheTimestamp;
-            var thirtyMinutesMs = cacheExpiryMinutes * 60 * 1000;
 
-            if (cacheAge < thirtyMinutesMs) {
-                var cachedData = SideCalendar.storageGet(cacheKey);
-                if (cachedData && cachedData.length > 0) {
-                    try {
-                        return JSON.parse(cachedData);
-                    } catch (parseError) {
-                    }
+        if (cachedData && cachedTime) {
+            var currentTime = Date.now();
+            var cacheAge = (currentTime - parseInt(cachedTime)) / (1000 * 60); // 分钟
+
+            if (cacheAge < cacheExpiryMinutes) {
+                try {
+                    var cachedEvents = JSON.parse(cachedData);
+                    console.log("使用缓存数据，缓存年龄: " + Math.round(cacheAge) + " 分钟");
+                    return cachedEvents;
+                } catch (parseError) {
+                    console.log("缓存数据解析失败，将重新获取");
                 }
-            } else {
             }
-        } else {
         }
 
         // 获取新数据
@@ -55,37 +52,27 @@ function fetchEvents(config) {
 
                 videos.forEach(function (video) {
                     var pubDate = new Date(video.created * 1000);
-                    var endDate = new Date(pubDate.getTime() + 15 * 60 * 1000);
 
                     var title = video.title;
                     var color = "#FB7299";
 
                     var playCount = formatCount(video.play);
-
-                    // 修复时长获取 - 尝试不同的字段名
-                    var durationStr = "未知";
-                    var duration = video.duration || video.length;
-
-                    if (duration && duration > 0) {
-                        durationStr = formatDuration(duration);
-                    }
+                    var danmakuCount = formatCount(video.video_review);
 
                     var notes = "UP主: " + video.author +
                         "\n播放: " + playCount +
-                        "\n弹幕: " + (video.video_review || 0) +
-                        "\n时长: " + durationStr +
-                        "\n发布: " + formatTime(pubDate);
+                        "\n弹幕: " + danmakuCount +
+                        "\n时长: " + video.length;
 
                     events.push({
                         title: title,
                         startDate: SideCalendar.formatDate(pubDate.getTime() / 1000),
-                        endDate: SideCalendar.formatDate(endDate.getTime() / 1000),
+                        endDate: SideCalendar.formatDate(pubDate.getTime() / 1000),
                         color: color,
+                        icon: nil,
                         notes: notes,
-                        icon: video.pic || null,
                         isAllDay: false,
                         isPointInTime: true,
-                        eventType: "bilibili_video",
                         href: "https://www.bilibili.com/video/" + video.bvid
                     });
                 });
@@ -95,12 +82,13 @@ function fetchEvents(config) {
                 try {
                     SideCalendar.storageSet(cacheKey, JSON.stringify(events));
                     SideCalendar.storageSet(cacheTimeKey, currentTime.toString());
+                    console.log("数据已缓存，事件数量: " + events.length);
                 } catch (cacheError) {
+                    console.log("缓存保存失败: " + cacheError.message);
                 }
 
             } else {
-                throw new Error("API返回格式错误: code=" + data.code + ", message=" + (data.message
-                    || "未知"));
+                throw new Error("API返回格式错误: code=" + data.code + ", message=" + (data.message || "未知"));
             }
         } else {
             throw new Error("HTTP请求失败");
@@ -109,53 +97,10 @@ function fetchEvents(config) {
     } catch (err) {
     }
 
+    function formatCount(count) {
+        if (!count || count === 0) return "0";
+        return count.toString();
+    }
+
     return events;
-}
-
-function formatCount(count) {
-    if (!count || count === 0) return "0";
-    if (count >= 10000) {
-        return Math.floor(count / 10000) + "万";
-    } else if (count >= 1000) {
-        return Math.floor(count / 1000) + "k";
-    }
-    return count.toString();
-}
-
-function formatDuration(seconds) {
-    if (!seconds || isNaN(seconds) || seconds <= 0) {
-        return "未知";
-    }
-
-    var hours = Math.floor(seconds / 3600);
-    var minutes = Math.floor((seconds % 3600) / 60);
-    var secs = seconds % 60;
-
-    if (hours > 0) {
-        return hours + ":" + padZero(minutes) + ":" + padZero(secs);
-    } else {
-        return minutes + ":" + padZero(secs);
-    }
-}
-
-function padZero(num) {
-    return (num < 10 ? "0" : "") + num;
-}
-
-function formatTime(date) {
-    var now = new Date();
-    var diffMs = now - date;
-    var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) {
-        return "今天";
-    } else if (diffDays === 1) {
-        return "昨天";
-    } else if (diffDays < 7) {
-        return diffDays + "天前";
-    } else if (diffDays < 30) {
-        return Math.floor(diffDays / 7) + "周前";
-    } else {
-        return Math.floor(diffDays / 30) + "月前";
-    }
 }
