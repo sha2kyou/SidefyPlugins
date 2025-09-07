@@ -4,7 +4,7 @@
 
 ```
 your-plugin-name/
-    ├── plugin.js # 插件代码
+    ├── main.js # 插件代码
     ├── info.json # 插件基础信息
     └── README.md # 说明文档
 ```
@@ -40,9 +40,9 @@ your-plugin-name/
 }
 ```
 
-## plugin.js
+## main.js
 
-必须包含 fetchEvents 函数（在 SideCalendar 自定义插件代码编辑器有说明）：
+必须包含 fetchEvents 函数（可参考 [bilibili_user_videos](https://github.com/sha2kyou/SideCalendarPlugins/tree/main/bilibili_user_videos)）：
 
 ```javascript
 function fetchEvents(config) {
