@@ -44,7 +44,7 @@ function fetchEvents(config) {
         };
 
         var response = null;
-        var maxRetries = 15;
+        var maxRetries = 8;
         var retryDelay = 1000; // 1秒
 
         // 重试机制
