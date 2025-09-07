@@ -69,7 +69,7 @@ function fetchEvents(config) {
                         startDate: SideCalendar.formatDate(pubDate.getTime() / 1000),
                         endDate: SideCalendar.formatDate(pubDate.getTime() / 1000),
                         color: color,
-                        icon: nil,
+                        icon: null,
                         notes: notes,
                         isAllDay: false,
                         isPointInTime: true,
