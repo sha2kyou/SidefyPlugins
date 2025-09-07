@@ -4,10 +4,10 @@ function fetchEvents(config) {
 
     var mid = config.mid;
 
-    var pageSize = "10";
+    var pageSize = 10;
     if (config && config.pageSize && config.pageSize !== "undefined" &&
         config.pageSize.toString().length > 0) {
-        pageSize = config.pageSize.toString();
+        pageSize = config.pageSize;
     }
 
     var cacheKey = "bilibili_videos_" + mid;
