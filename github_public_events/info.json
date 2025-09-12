@@ -1,7 +1,7 @@
 {
     "plugin_id": "github_public_events",
     "name": "GitHub 公开实时时间线",
-    "description": "获取并展示 GitHub 上的公开实时动态，例如 star、fork、issue 等。",
+    "description": "获取并展示 GitHub 上的公开实时动态。",
     "version": "0.1.1",
     "author": "sha2kyou",
     "min_support_app_version": "2025.3.0",
