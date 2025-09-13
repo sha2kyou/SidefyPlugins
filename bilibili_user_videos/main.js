@@ -30,16 +30,23 @@ function fetchEvents(config) {
         pageSize = config.pageSize;
     }
 
+    var cacheExpiryMinutes = 30;
+
     // 遍历每个 mid
     midList.forEach(function (mid) {
         var cacheKey = "bilibili_user_videos_" + mid;
 
         try {
-            // 检查缓存 - 简化处理
+            // 检查缓存
             var cachedData = sdcl.storage.get(cacheKey);
             if (cachedData) {
-                events = events.concat(cachedData);
-                return; // 跳过当前 mid 的网络请求
+                try {
+                    var cachedEvents = JSON.parse(cachedData);
+                    events = events.concat(cachedEvents);
+                    return; // 跳过当前 mid 的网络请求
+                } catch (parseError) {
+                    // 缓存解析失败，继续网络请求
+                }
             }
 
             // 获取新数据 - 添加重试机制
@@ -52,8 +59,8 @@ function fetchEvents(config) {
             };
 
             var response = null;
-            var maxRetries = 5;
-            var retryDelay = 500;
+            var maxRetries = 3; // 减少重试次数，因为有多个UP主
+            var retryDelay = 1000; // 1秒
 
             // 重试机制
             for (var attempt = 0; attempt < maxRetries; attempt++) {
@@ -62,16 +69,21 @@ function fetchEvents(config) {
                 try {
                     response = sdcl.http.get(url, headers);
                     if (response && response.length > 0) {
+                        // 检查API返回的状态码
                         try {
                             var tempData = JSON.parse(response);
                             if (tempData.code === 0) {
+                                // API成功，跳出重试循环
                                 break;
                             } else if (tempData.code === -799) {
+                                // 频率限制错误，需要重试
                                 shouldRetry = true;
                             } else {
+                                // 其他API错误，不重试
                                 break;
                             }
                         } catch (parseError) {
+                            // 响应解析失败，不重试
                             break;
                         }
                     } else {
@@ -81,12 +93,15 @@ function fetchEvents(config) {
                     shouldRetry = true;
                 }
 
+                // 如果需要重试且不是最后一次尝试
                 if (shouldRetry && attempt < maxRetries - 1) {
+                    // 使用同步延时方法
                     var endTime = Date.now() + retryDelay;
                     while (Date.now() < endTime) {
                         // 同步等待
                     }
                 } else if (shouldRetry) {
+                    // 已达到最大重试次数
                     break;
                 }
             }
@@ -106,7 +121,8 @@ function fetchEvents(config) {
                         var color = "#FB7299";
 
                         var playCount = formatCount(video.play);
-                        var danmakuCount = formatCount(video.video_review);
+                        var danmakuCount =
+                            formatCount(video.video_review);
 
                         var notes = "UP主: " + video.author +
                             "\n播放: " + playCount +
@@ -126,8 +142,12 @@ function fetchEvents(config) {
                         });
                     });
 
-                    // 缓存成功的数据 - 直接传递数组对象
-                    sdcl.storage.set(cacheKey, upEvents, 30);
+                    // 缓存成功的数据（30分钟TTL）
+                    try {
+                        sdcl.storage.set(cacheKey, JSON.stringify(upEvents), 30);
+                    } catch (cacheError) {
+                        // 缓存保存失败，忽略
+                    }
 
                     // 添加到总事件数组
                     events = events.concat(upEvents);

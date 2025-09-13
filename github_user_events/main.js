@@ -18,10 +18,14 @@ function fetchEvents(config) {
     var cacheKey = "github_user_events_" + username;
 
     try {
-        // 检查缓存 - 简化处理
+        // 检查缓存
         var cachedData = sdcl.storage.get(cacheKey);
         if (cachedData) {
-            return cachedData; // 直接返回，TTL函数已处理反序列化
+            try {
+                return JSON.parse(cachedData);
+            } catch (parseError) {
+                // 缓存解析失败，继续网络请求
+            }
         }
 
         // 构建 API URL
@@ -77,8 +81,12 @@ function fetchEvents(config) {
             });
         });
 
-        // 缓存结果 - 直接传递数组，使用30分钟TTL
-        sdcl.storage.set(cacheKey, events, 30);
+        // 缓存结果（默认15分钟TTL）
+        try {
+            sdcl.storage.set(cacheKey, JSON.stringify(events));
+        } catch (cacheError) {
+            // 缓存失败不影响功能
+        }
 
     } catch (err) {
         throw new Error("GitHub 个人事件获取失败: " + err.message);
@@ -87,7 +95,7 @@ function fetchEvents(config) {
     return events;
 }
 
-// 其余函数保持不变...
+// 生成事件标题
 function generateEventTitle(event) {
     var actor = event.actor.login;
     var repo = event.repo ? event.repo.name : "";
@@ -150,35 +158,37 @@ function generateEventTitle(event) {
     }
 }
 
+// 获取事件颜色
 function getEventColor(eventType) {
     switch (eventType) {
         case "PushEvent":
-            return "#4285f4";
+            return "#4285f4"; // 蓝色
         case "CreateEvent":
-            return "#ff6d01";
+            return "#ff6d01"; // 橙色
         case "DeleteEvent":
-            return "#ea4335";
+            return "#ea4335"; // 红色
         case "ForkEvent":
-            return "#34a853";
+            return "#34a853"; // 绿色
         case "WatchEvent":
-            return "#f1c232";
+            return "#f1c232"; // 黄色
         case "IssuesEvent":
         case "IssueCommentEvent":
-            return "#ea4335";
+            return "#ea4335"; // 红色
         case "PullRequestEvent":
         case "PullRequestReviewEvent":
-            return "#9b59b6";
+            return "#9b59b6"; // 紫色
         case "ReleaseEvent":
-            return "#ff6d01";
+            return "#ff6d01"; // 橙色
         case "PublicEvent":
-            return "#34a853";
+            return "#34a853"; // 绿色
         case "MemberEvent":
-            return "#4285f4";
+            return "#4285f4"; // 蓝色
         default:
-            return "#666666";
+            return "#666666"; // 灰色
     }
 }
 
+// 生成事件备注
 function generateEventNotes(event) {
     var notes = "GitHub 活动";
 
@@ -214,6 +224,7 @@ function generateEventNotes(event) {
     return notes;
 }
 
+// 生成事件链接
 function generateEventUrl(event) {
     if (!event.repo) {
         return "https://github.com/" + event.actor.login;
