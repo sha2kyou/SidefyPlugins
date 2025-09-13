@@ -58,9 +58,7 @@ function fetchEvents(config) {
             }
 
             // 获取新数据 - 添加重试机制
-            var url = "https://api.bilibili.com/x/space/arc/search?mid=" +
-                mid + "&pn=1&ps=" + pageSize +
-                "&order=pubdate";
+            var url = "https://api.bilibili.com/x/space/arc/search?mid=" + mid + "&pn=1&ps=" + pageSize + "&order=pubdate";
 
             var headers = {
                 "User-Agent": "SideCalendar Bilibili Plugin",
