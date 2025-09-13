@@ -35,25 +35,17 @@ function fetchEvents(config) {
     // 遍历每个 mid
     midList.forEach(function (mid) {
         var cacheKey = "bilibili_user_videos_" + mid;
-        var cacheTimeKey = "bilibili_cache_time_" + mid;
 
         try {
             // 检查缓存
-            var cachedData = SideCalendar.storageGet(cacheKey);
-            var cachedTime = SideCalendar.storageGet(cacheTimeKey);
-
-            if (cachedData && cachedTime) {
-                var currentTime = Date.now();
-                var cacheAge = (currentTime - parseInt(cachedTime)) / (1000 * 60); // 分钟
-
-                if (cacheAge < cacheExpiryMinutes) {
-                    try {
-                        var cachedEvents = JSON.parse(cachedData);
-                        events = events.concat(cachedEvents);
-                        return; // 跳过当前 mid 的网络请求
-                    } catch (parseError) {
-                        // 缓存解析失败，继续网络请求
-                    }
+            var cachedData = sdcl.storage.get(cacheKey);
+            if (cachedData) {
+                try {
+                    var cachedEvents = JSON.parse(cachedData);
+                    events = events.concat(cachedEvents);
+                    return; // 跳过当前 mid 的网络请求
+                } catch (parseError) {
+                    // 缓存解析失败，继续网络请求
                 }
             }
 
@@ -75,7 +67,7 @@ function fetchEvents(config) {
                 var shouldRetry = false;
 
                 try {
-                    response = SideCalendar.httpGet(url, headers);
+                    response = sdcl.http.get(url, headers);
                     if (response && response.length > 0) {
                         // 检查API返回的状态码
                         try {
@@ -139,10 +131,8 @@ function fetchEvents(config) {
 
                         upEvents.push({
                             title: title,
-                            startDate:
-                                SideCalendar.formatDate(pubDate.getTime() / 1000),
-                            endDate:
-                                SideCalendar.formatDate(pubDate.getTime() / 1000),
+                            startDate: sdcl.date.format(pubDate.getTime() / 1000),
+                            endDate: sdcl.date.format(pubDate.getTime() / 1000),
                             color: color,
                             icon: config.icon,
                             notes: notes,
@@ -152,13 +142,9 @@ function fetchEvents(config) {
                         });
                     });
 
-                    // 缓存成功的数据
-                    var currentTime = Date.now();
+                    // 缓存成功的数据（30分钟TTL）
                     try {
-                        SideCalendar.storageSet(cacheKey,
-                            JSON.stringify(upEvents));
-                        SideCalendar.storageSet(cacheTimeKey,
-                            currentTime.toString());
+                        sdcl.storage.set(cacheKey, JSON.stringify(upEvents), 30);
                     } catch (cacheError) {
                         // 缓存保存失败，忽略
                     }
