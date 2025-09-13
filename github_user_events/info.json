@@ -3,7 +3,7 @@
     "description": "获取指定 GitHub 用户的公开活动事件，包括推送、fork、star、issue、PR 等活动。支持 token 认证以获得更高的 API 调用限制。",
     "version": "0.0.1",
     "author": "SideCalendar",
-    "min_support_app_version": "2025.19.0",
+    "min_support_app_version": "2025.9.0",
     "tags": [
         "GitHub",
         "开发",
