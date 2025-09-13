@@ -1,7 +1,7 @@
 {
     "name": "GitHub 个人事件",
     "description": "获取指定 GitHub 用户的公开活动事件，包括推送、fork、star、issue、PR 等活动。支持 token 认证以获得更高的 API 调用限制。",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "author": "sha2kyou",
     "min_support_app_version": "2025.9.0",
     "tags": [
@@ -17,6 +17,7 @@
         "username": {
             "type": "string",
             "default": "",
+            "required": true,
             "description": "GitHub 用户名"
         },
         "token": {
