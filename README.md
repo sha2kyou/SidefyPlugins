@@ -3,6 +3,7 @@
 ## 📁 文件结构
 
 ```
+//目录名称，同时也是客户端唯一插件id
 your-plugin-name/
     ├── main.js # 插件代码
     ├── info.json # 插件基础信息
@@ -13,14 +14,16 @@ your-plugin-name/
 
 ```json
 {
-  "plugin_id": "bilibili_user_videos",
   "name": "Bilibili 用户视频",
   "description": "追踪指定B站UP主的最新视频投稿，实时显示视频标题、播放量、发布时间等信息",
+  //插件版本，更新后客户端会显示更新提醒
   "version": "0.1.0",
   "author": "sha2kyou",
+  //限制最低适配的 SideCalendar 版本，比该版本低的客户端无法下载该插件
   "min_support_app_version": "2025.3.0",
   "tags": ["bilibili", "哔哩哔哩", "视频", "UP主", "动态", "社交媒体"],
   "category": "社交媒体",
+  //配置参数在插件下载后会被自动映射到对应的输入框
   "config_options": {
     "mid": {
       "type": "string",
@@ -29,12 +32,15 @@ your-plugin-name/
     },
     "pageSize": {
       "type": "number",
-      "default": 25,
+      "default": 10,
       "description": "每次获取的视频数量"
     }
   },
+  //如果不申请正确的权限，则无法进行对应的操作
   "requirements": {
+    //网络权限
     "network": true,
+    //存储权限：最大限制存储16k数据
     "storage": true
   }
 }
@@ -63,7 +69,6 @@ function fetchEvents(config) {
       href: "https://example.com", // 可选，点击跳转
     });
   } catch (err) {
-    SideCalendar.log("插件错误: " + err.message);
   }
 
   return events;
