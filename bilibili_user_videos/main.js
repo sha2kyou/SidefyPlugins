@@ -46,7 +46,7 @@ function fetchEvents(config) {
             var url = "https://api.bilibili.com/x/space/arc/search?mid=" + mid + "&pn=1&ps=" + pageSize + "&order=pubdate";
 
             var headers = {
-                "User-Agent": "SideCalendar Bilibili Plugin",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
                 "Accept": "application/json",
                 "Referer": "https://www.bilibili.com/"
             };

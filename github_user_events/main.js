@@ -29,7 +29,7 @@ function fetchEvents(config) {
 
         // 设置请求头
         var headers = {
-            "User-Agent": "SideCalendar GitHub Plugin",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
             "Accept": "application/vnd.github.v3+json"
         };
 
