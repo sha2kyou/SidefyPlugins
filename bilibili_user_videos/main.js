@@ -122,7 +122,8 @@ function fetchEvents(config) {
                             notes: notes,
                             isAllDay: false,
                             isPointInTime: true,
-                            href: "https://www.bilibili.com/video/" + video.bvid
+                            href: "https://www.bilibili.com/video/" + video.bvid,
+                            imageURL: video.pic
                         });
                     });
 
