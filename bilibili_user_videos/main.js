@@ -52,8 +52,8 @@ function fetchEvents(config) {
             };
 
             var response = null;
-            var maxRetries = 10;
-            var retryDelay = 1500;
+            var maxRetries = 3;
+            var retryDelay = 3000;
 
             // 重试机制
             for (var attempt = 0; attempt < maxRetries; attempt++) {
@@ -126,7 +126,7 @@ function fetchEvents(config) {
                         });
                     });
 
-                    // 缓存成功的数据 - 直接传递数组对象
+                    // 缓存成功的数据 - 直接传递数组对象（缓存30分钟）
                     sdcl.storage.set(cacheKey, upEvents, 30);
 
                     // 添加到总事件数组
