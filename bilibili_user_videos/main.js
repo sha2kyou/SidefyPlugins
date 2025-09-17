@@ -12,7 +12,7 @@ function fetchEvents(config) {
         pageSize = config.pageSize;
     }
 
-    var cacheKey = "bilibili_user_videos_" + mid;
+    var cacheKey = "bilibili_user_videos_v1_" + mid;
 
     try {
         // 检查缓存
@@ -31,8 +31,8 @@ function fetchEvents(config) {
         };
 
         var response = null;
-        var maxRetries = 3;
-        var retryDelay = 3000;
+        var maxRetries = 10;
+        var retryDelay = 5000;
 
         // 重试机制
         for (var attempt = 0; attempt < maxRetries; attempt++) {
