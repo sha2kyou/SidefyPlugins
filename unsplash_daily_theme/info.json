@@ -1,0 +1,28 @@
+{
+    "name": "Unsplash 每日图片",
+    "description": "每天在早10点、中午1点、下午6点，为您展示三张不同主题的精美图片。",
+    "version": "0.1.0",
+    "author": "sha2kyou",
+    "min_support_app_version": "2025.9.8",
+    "tags": [
+        "unsplash",
+        "图片",
+        "摄影",
+        "每日",
+        "主题",
+        "设计"
+    ],
+    "category": "图片与设计",
+    "config_options": {
+        "access_key": {
+            "type": "password",
+            "default": "",
+            "required": true,
+            "description": "您的 Unsplash API 访问密钥"
+        }
+    },
+    "requirements": {
+        "network": true,
+        "storage": true
+    }
+}
