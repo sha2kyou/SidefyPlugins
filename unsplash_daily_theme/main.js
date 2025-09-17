@@ -76,6 +76,7 @@ function fetchEvents(config) {
                 color: photo.color || "#666666",
                 notes: notes,
                 href: photo.links.html,
+                icon: photo.user.profile_image.small, // 作者头像
                 imageURL: photo.urls.small, // 使用 small 尺寸作为预览图
                 isAllDay: false,
                 isPointInTime: true
