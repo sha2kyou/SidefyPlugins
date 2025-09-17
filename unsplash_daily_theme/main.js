@@ -12,7 +12,7 @@ function fetchEvents(config) {
     // --- 每日缓存逻辑 ---
     var today = new Date();
     var dateString = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-    var cacheKey = "unsplash_daily_theme_" + dateString;
+    var cacheKey = "unsplash_daily_theme_v1_" + dateString;
 
     var cachedData = sdcl.storage.get(cacheKey);
     if (cachedData) {
