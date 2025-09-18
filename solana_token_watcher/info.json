@@ -16,16 +16,19 @@
     "[token]": {
       "type": "string",
       "default": "",
+      "required": true,
       "description": "token对应的地址, example: sol = So11111111111111111111111111111111111111112, v2ex = 2VEXXz8JH1kq4i3b3t6b5c5k5c5k5c5k5c5k5c5k5c5k, mb = MBxxz8JH1kq4i3b3t6b5c5k5c5k5c5k5c5k5c5k5c"
     },
     "[token]_watcher_value": {
       "type": "number",
       "default": "",
+      "required": true,
       "description": "当价格低于此值时发送通知, example: v2ex_watcher_value = 0.01"
     },
     "[token]watcher_direction": {
       "type": "string",
       "default": "down",
+      "required": true,
       "description": "监控方向。down=价格下穿阈值触发，up=价格上穿阈值触发。支持两种键名写法：[token]watcher_direction（如 v2exwatcher_direction）或 [token]_watcher_direction（如 v2ex_watcher_direction）。"
     }
   },
