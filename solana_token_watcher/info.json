@@ -1,0 +1,35 @@
+{
+  "name": "监控solana代币",
+  "description": "监控指定的 Solana 代币价格，并在价格变动时发送通知。",
+  "version": "0.0.1",
+  "author": "joejoejoe",
+  "min_support_app_version": "2025.9.5",
+  "tags": ["solana", "watcher", "token", "Crypto"],
+  "category": "Crypto",
+  "config_options": {
+    "tokens": {
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "要监控的 Solana 代币的合约符号，多个地址用逗号分隔, example: sol,v2ex,mb"
+    },
+    "[token]": {
+      "type": "string",
+      "default": "",
+      "description": "token对应的地址, example: sol = So11111111111111111111111111111111111111112, v2ex = 2VEXXz8JH1kq4i3b3t6b5c5k5c5k5c5k5c5k5c5k5c5k, mb = MBxxz8JH1kq4i3b3t6b5c5k5c5k5c5k5c5k5c5k5c"
+    },
+    "[token]_watcher_value": {
+      "type": "number",
+      "default": "",
+      "description": "当价格低于此值时发送通知, example: v2ex_watcher_value = 0.01"
+    },
+    "[token]watcher_direction": {
+      "type": "string",
+      "default": "down",
+      "description": "监控方向。down=价格下穿阈值触发，up=价格上穿阈值触发。支持两种键名写法：[token]watcher_direction（如 v2exwatcher_direction）或 [token]_watcher_direction（如 v2ex_watcher_direction）。"
+    }
+  },
+  "requirements": {
+    "network": true
+  }
+}
