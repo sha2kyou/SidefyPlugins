@@ -3,7 +3,7 @@
   "description": "监控指定的 Solana 代币价格，并在价格变动时发送通知。",
   "version": "0.0.1",
   "author": "joejoejoe",
-  "min_support_app_version": "2025.9.8",
+  "min_support_app_version": "2025.9.7",
   "tags": ["solana", "watcher", "token", "Crypto"],
   "category": "Crypto",
   "config_options": {
