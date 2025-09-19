@@ -6,12 +6,17 @@ function fetchEvents(config) {
     // --- 每日缓存逻辑 ---
     var today = new Date();
     var dateString = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-    var cacheKey = "pokemon_daily_v11_" + dateString;
+    var cacheKey = "pokemon_daily_v12_" + dateString;
 
     var cachedData = sdcl.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
     }
+
+    // 计算到当天结束剩余的分钟数
+    var endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+    var remainingMinutes = Math.ceil((endOfDay.getTime() - today.getTime()) / (1000 * 60));
 
     // --- 随机宝可梦逻辑 ---
     var events = [];
@@ -47,9 +52,9 @@ function fetchEvents(config) {
             isPointInTime: true
         });
 
-        // 将成功获取的事件缓存24小时（1440分钟）
+        // 将成功获取的事件缓存到当天结束
         if (events.length > 0) {
-            sdcl.storage.set(cacheKey, events, 1440);
+            sdcl.storage.set(cacheKey, events, remainingMinutes);
         }
 
     } catch (err) {

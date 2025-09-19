@@ -12,12 +12,17 @@ function fetchEvents(config) {
     // --- 每日缓存逻辑 ---
     var today = new Date();
     var dateString = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-    var cacheKey = "unsplash_daily_theme_v1_" + dateString;
+    var cacheKey = "unsplash_daily_theme_v2_" + dateString;
 
     var cachedData = sdcl.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
     }
+
+    // 计算到当天结束剩余的分钟数
+    var endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+    var remainingMinutes = Math.ceil((endOfDay.getTime() - today.getTime()) / (1000 * 60));
 
     // --- 每日主题与图片获取逻辑 ---
     var events = [];
@@ -83,9 +88,9 @@ function fetchEvents(config) {
             });
         }
 
-        // 将成功获取的事件缓存24小时（1440分钟）
+        // 将成功获取的事件缓存到当天结束
         if (events.length === 3) {
-            sdcl.storage.set(cacheKey, events, 1440);
+            sdcl.storage.set(cacheKey, events, remainingMinutes);
         } else {
             throw new Error("未能成功获取全部3张图片。");
         }
