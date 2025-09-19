@@ -1,0 +1,20 @@
+{
+    "name": "Daily Random Pokemon",
+    "description": "Daily random Pokemon from Generation 1-6 (#1-720) with image, name, number, and detailed information.",
+    "version": "0.0.1",
+    "author": "sha2kyou",
+    "min_support_app_version": "2025.9.8",
+    "tags": [
+        "pokemon",
+        "daily",
+        "random",
+        "game",
+        "anime"
+    ],
+    "category": "Entertainment & Games",
+    "config_options": {},
+    "requirements": {
+        "network": true,
+        "storage": true
+    }
+}
