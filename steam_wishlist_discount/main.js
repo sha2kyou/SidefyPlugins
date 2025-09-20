@@ -19,7 +19,7 @@ function fetchEvents(config) {
     var halfHourSlot = Math.floor(currentMinute / 30);
     var timeSlot = currentHour + ":" + (halfHourSlot * 30);
     var dateString = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-    var cacheKey = "steam_wishlist_discount_v2_" + steamId + "_" + dateString + "_" + timeSlot;
+    var cacheKey = "steam_wishlist_discount_v4_" + steamId + "_" + dateString + "_" + timeSlot;
 
     var cachedData = sdcl.storage.get(cacheKey);
     if (cachedData) {
