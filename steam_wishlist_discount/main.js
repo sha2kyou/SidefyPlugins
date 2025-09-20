@@ -3,12 +3,16 @@
  * 每30分钟检查一次用户的 Steam 愿望单中游戏的打折信息，并在日历中显示打折游戏。
  */
 function fetchEvents(config) {
+
+
     // 检查 Steam 用户名是否存在
     var steamId = config.steam_id;
 
     if (!steamId || steamId.trim() === "") {
         throw new Error("Steam 用户名不能为空，请在插件配置中填入您的 Steam 用户名。");
     }
+
+
 
     // --- 半小时缓存逻辑 ---
     var now = new Date();
@@ -19,7 +23,7 @@ function fetchEvents(config) {
     var halfHourSlot = Math.floor(currentMinute / 30);
     var timeSlot = currentHour + ":" + (halfHourSlot * 30);
     var dateString = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-    var cacheKey = "steam_wishlist_discount_v4_" + steamId + "_" + dateString + "_" + timeSlot;
+    var cacheKey = "steam_wishlist_discount_v10_" + steamId + "_" + dateString + "_" + timeSlot;
 
     var cachedData = sdcl.storage.get(cacheKey);
     if (cachedData) {
@@ -67,15 +71,20 @@ function fetchEvents(config) {
         var wishlistData = JSON.parse(wishlistResponse);
 
         // 新API返回格式: {"response": {"items": [...]}
+
         var gameItems = [];
         if (wishlistData.response && wishlistData.response.items) {
             gameItems = wishlistData.response.items;
         }
 
+
+
         if (gameItems.length === 0) {
             // 如果愿望单为空，创建一个提示事件
             var eventDate = new Date();
-            eventDate.setHours(12, 0, 0, 0);
+            var timezoneOffset = eventDate.getTimezoneOffset();
+            eventDate.setHours(0, 0, 0, 0);
+            eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
 
             events.push({
                 title: "Steam 愿望单为空",
@@ -97,6 +106,7 @@ function fetchEvents(config) {
         var batchSize = 50; // 每次最多检查50个游戏
         var gamesToCheck = gameItems.slice(0, batchSize);
 
+
         for (var i = 0; i < gamesToCheck.length; i++) {
             var gameItem = gamesToCheck[i];
             var appId = gameItem.appid;
@@ -111,11 +121,13 @@ function fetchEvents(config) {
                 }
 
                 var gameDetail = JSON.parse(gameDetailResponse);
+
                 if (!gameDetail[appId] || !gameDetail[appId].success) {
                     continue;
                 }
 
                 var data = gameDetail[appId].data;
+
 
                 // 检查是否有打折
                 if (data.price_overview && data.price_overview.discount_percent > 0) {
@@ -143,16 +155,18 @@ function fetchEvents(config) {
                 }
 
             } catch (gameErr) {
-                // 跳过有问题的游戏
                 continue;
             }
         }
+
 
         // 3. 创建打折游戏的日历事件
         if (discountedGames.length === 0) {
             // 如果没有打折游戏，创建一个提示事件
             var eventDate = new Date();
-            eventDate.setHours(12, 0, 0, 0);
+            var timezoneOffset = eventDate.getTimezoneOffset();
+            eventDate.setHours(0, 0, 0, 0);
+            eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
 
             events.push({
                 title: "愿望单暂无打折游戏",
@@ -169,16 +183,21 @@ function fetchEvents(config) {
             for (var j = 0; j < discountedGames.length; j++) {
                 var game = discountedGames[j];
 
-                // 设置为当天的全天事件
+                // 设置为当天的全天事件（本地时间）
                 var eventDate = new Date();
-                eventDate.setHours(0, 0, 0, 0); // 设置为当天开始
+                // 获取本地时区偏移量（分钟）
+                var timezoneOffset = eventDate.getTimezoneOffset();
+                // 设置为当天0点本地时间，然后转换为UTC
+                eventDate.setHours(0, 0, 0, 0);
+                // 调整为UTC时间以正确显示
+                eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
 
                 var discountColor = getDiscountColor(game.discountPercent);
                 var notes = "原价: " + game.originalPrice + "\n" +
                            "现价: " + game.finalPrice + "\n" +
                            "折扣: -" + game.discountPercent + "%";
 
-                events.push({
+                var gameEvent = {
                     title: game.name + " (-" + game.discountPercent + "%)",
                     startDate: sdcl.date.format(eventDate.getTime() / 1000),
                     endDate: sdcl.date.format(eventDate.getTime() / 1000),
@@ -188,13 +207,17 @@ function fetchEvents(config) {
                     imageURL: game.headerImage,
                     isAllDay: true,
                     isPointInTime: true
-                });
+                };
+
+                events.push(gameEvent);
             }
         }
+
 
         // 将成功获取的事件缓存30分钟
         if (events.length > 0) {
             sdcl.storage.set(cacheKey, events, remainingMinutes);
+        } else {
         }
 
     } catch (err) {
