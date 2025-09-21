@@ -1,115 +1,136 @@
-// 每日智慧语录插件
+// 每日智慧语录插件 - 每3小时生成随机风格语录
 function fetchEvents(config) {
     try {
         var events = [];
         var now = new Date();
 
-        // 获取用户配置，设置默认值
-        var style = config.style || "励志";
-        var language = config.language || "中文";
-        var timeSlot = config.time || "morning";
+        // 根据应用语言自动选择语言
+        var language = getLanguageByApp();
 
-        // 如果用户选择了"自动"语言，则使用应用语言设置
-        if (language === "自动") {
-            var appLang = sdcl.app.language();
+        // 获取当前日期的时间段（每3小时一段：0-3, 3-6, 6-9, 9-12, 12-15, 15-18, 18-21, 21-24）
+        var timeSlots = getTimeSlots();
 
-            // 根据应用语言自动选择合适的语录语言
-            if (appLang === "zh" || appLang === "zh-Hans" || appLang === "zh-Hant") {
-                language = "中文";
-            } else if (appLang === "en") {
-                language = "英文";
-            } else if (appLang === "ja") {
-                language = "日语";
-            } else if (appLang === "ko") {
-                language = "韩语";
-            } else if (appLang === "de") {
-                language = "德语";
-            } else if (appLang === "fr") {
-                language = "法语";
-            } else if (appLang === "es") {
-                language = "西班牙语";
-            } else if (appLang === "pt") {
-                language = "葡萄牙语";
-            } else if (appLang === "ru") {
-                language = "俄语";
+        for (var i = 0; i < timeSlots.length; i++) {
+            var slot = timeSlots[i];
+
+            // 生成该时间段的缓存键
+            var dateKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+            var cacheKey = "wisdom_" + dateKey + "_" + slot.id;
+
+            // 尝试从缓存获取语录
+            var cachedWisdom = sdcl.storage.get(cacheKey);
+            var wisdomText = "";
+
+            if (cachedWisdom) {
+                wisdomText = cachedWisdom;
             } else {
-                language = "英文"; // 默认英文
+                // 为该时间段生成随机风格的语录
+                var randomStyle = getRandomStyle();
+                var dateContext = generateDateContext(now);
+                var prompt = buildPrompt(randomStyle, language, dateContext, slot.period);
+
+                // 调用AI生成语录
+                wisdomText = sdcl.ai.chat(prompt);
+
+                // 计算到今天结束的剩余分钟数
+                var remainingMinutes = getRemainingMinutesToday();
+
+                // 缓存语录
+                if (wisdomText && wisdomText.indexOf("Error:") !== 0) {
+                    sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
+                } else {
+                    // AI调用失败时的备用语录
+                    wisdomText = getFallbackWisdom(randomStyle, language);
+                }
             }
+
+            // 创建智慧语录事件
+            events.push({
+                title: slot.label + "智慧语录",
+                startDate: sdcl.date.format(slot.startTime.getTime() / 1000),
+                endDate: sdcl.date.format(slot.endTime.getTime() / 1000),
+                color: slot.color,
+                notes: wisdomText,
+                isAllDay: false,
+                isPointInTime: false,
+                href: null,
+                imageURL: null
+            });
         }
 
-        // 确定显示时间范围
-        var timeRanges = {
-            "morning": { start: 7, end: 9, label: "早安" },
-            "afternoon": { start: 14, end: 16, label: "午后" },
-            "evening": { start: 18, end: 20, label: "傍晚" }
-        };
-
-        var selectedTime = timeRanges[timeSlot];
-        if (!selectedTime) {
-            selectedTime = timeRanges["morning"];
-        }
-
-        // 创建今天该时间段的事件时间
-        var today = new Date();
-        var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), selectedTime.start, 0, 0);
-        var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), selectedTime.end, 0, 0);
-
-        // 生成基于日期的缓存键，确保每天内容不同
-        var dateKey = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-        var cacheKey = "daily_wisdom_" + dateKey + "_" + style + "_" + language;
-
-        // 尝试从缓存获取今日语录
-        var cachedWisdom = sdcl.storage.get(cacheKey);
-        var wisdomText = "";
-
-        if (cachedWisdom) {
-            sdcl.log("使用缓存的今日智慧语录");
-            wisdomText = cachedWisdom;
-        } else {
-            sdcl.log("生成新的今日智慧语录");
-
-            // 根据日期生成上下文信息
-            var dateContext = generateDateContext(today);
-
-            // 构建AI提示词
-            var prompt = buildPrompt(style, language, dateContext);
-
-            // 调用AI生成语录
-            wisdomText = sdcl.ai.chat(prompt);
-
-            // 计算到今天结束的剩余分钟数
-            var remainingMinutes = getRemainingMinutesToday();
-
-            // 缓存今日语录（到当天结束）
-            if (wisdomText && wisdomText.indexOf("Error:") !== 0) {
-                sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
-            } else {
-                // AI调用失败时的备用语录
-                wisdomText = getFallbackWisdom(style, language);
-            }
-        }
-
-        // 创建智慧语录事件
-        events.push({
-            title: selectedTime.label + "智慧语录",
-            startDate: sdcl.date.format(startTime.getTime() / 1000),
-            endDate: sdcl.date.format(endTime.getTime() / 1000),
-            color: getColorByStyle(style),
-            notes: wisdomText,
-            icon: "💡",
-            isAllDay: false,
-            isPointInTime: false,
-            href: null,
-            imageURL: null
-        });
-
-        sdcl.log("生成了 " + events.length + " 条智慧语录事件");
         return events;
 
     } catch (error) {
-        sdcl.log("智慧语录插件执行错误: " + error.message);
         return [];
     }
+}
+
+// 根据应用语言自动选择语言
+function getLanguageByApp() {
+    var appLang = sdcl.app.language();
+
+    if (appLang === "zh" || appLang === "zh-Hans" || appLang === "zh-Hant") {
+        return "中文";
+    } else if (appLang === "en") {
+        return "英文";
+    } else if (appLang === "ja") {
+        return "日语";
+    } else if (appLang === "ko") {
+        return "韩语";
+    } else if (appLang === "de") {
+        return "德语";
+    } else if (appLang === "fr") {
+        return "法语";
+    } else if (appLang === "es") {
+        return "西班牙语";
+    } else if (appLang === "pt") {
+        return "葡萄牙语";
+    } else if (appLang === "ru") {
+        return "俄语";
+    } else {
+        return "英文"; // 默认英文
+    }
+}
+
+// 获取8个3小时时间段
+function getTimeSlots() {
+    var today = new Date();
+    var slots = [];
+
+    var timeSlotConfig = [
+        { start: 0, label: "深夜", color: "#4A5568" },
+        { start: 3, label: "凌晨", color: "#2D3748" },
+        { start: 6, label: "清晨", color: "#F6AD55" },
+        { start: 9, label: "上午", color: "#FBD38D" },
+        { start: 12, label: "中午", color: "#F56565" },
+        { start: 15, label: "下午", color: "#4FD1C7" },
+        { start: 18, label: "傍晚", color: "#9F7AEA" },
+        { start: 21, label: "夜晚", color: "#805AD5" }
+    ];
+
+    for (var i = 0; i < timeSlotConfig.length; i++) {
+        var config = timeSlotConfig[i];
+        var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), config.start, 0, 0);
+        var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), config.start + 3, 0, 0);
+
+        slots.push({
+            id: "slot_" + config.start,
+            label: config.label,
+            color: config.color,
+            startTime: startTime,
+            endTime: endTime,
+            period: config.label
+        });
+    }
+
+    return slots;
+}
+
+// 随机选择语录风格
+function getRandomStyle() {
+    var styles = ["励志", "哲理", "诗意", "实用", "幽默"];
+    var randomIndex = Math.floor(Math.random() * styles.length);
+    return styles[randomIndex];
 }
 
 // 计算到今天结束的剩余分钟数
@@ -144,7 +165,7 @@ function generateDateContext(date) {
 }
 
 // 构建AI提示词
-function buildPrompt(style, language, context) {
+function buildPrompt(style, language, context, timePeriod) {
     var basePrompt = "";
 
     // 基础设定
@@ -157,7 +178,7 @@ function buildPrompt(style, language, context) {
     }
 
     // 添加时间和季节上下文
-    var contextPrompt = "现在是" + context.season + "，星期" + context.dayOfWeek + "，" + context.month + "月" + context.date + "日。";
+    var contextPrompt = "现在是" + context.season + "，星期" + context.dayOfWeek + "，" + context.month + "月" + context.date + "日的" + timePeriod + "。";
 
     // 风格指导
     var styleGuide = getStyleGuide(style, language);
