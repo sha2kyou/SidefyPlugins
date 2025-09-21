@@ -1,4 +1,5 @@
 // 每日智慧语录插件 - 每3小时生成随机风格语录
+
 function fetchEvents(config) {
     try {
         var events = [];
