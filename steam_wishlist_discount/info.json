@@ -1,8 +1,8 @@
 {
     "name": "Steam 愿望单打折监听",
     "description": "每30分钟检查一次您的 Steam 愿望单中游戏的打折信息，当有游戏打折时在日历中提醒您。",
-    "version": "0.0.4",
-    "author": "sha2kyou",
+    "version": "0.0.5",
+    "author": "Sidefy Team",
     "min_support_app_version": "2025.9.0",
     "tags": [
         "steam",

@@ -1,8 +1,8 @@
 {
     "name": "Unsplash 每日图片",
     "description": "每天在早10点、中午1点、下午6点，为您展示三张不同主题的精美图片。",
-    "version": "0.1.3",
-    "author": "sha2kyou",
+    "version": "0.1.4",
+    "author": "Sidefy Team",
     "min_support_app_version": "2025.9.8",
     "tags": [
         "unsplash",
