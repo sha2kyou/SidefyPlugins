@@ -13,6 +13,7 @@ function fetchEvents(config) {
 
         // 尝试从缓存获取今日语录
         var cachedWisdom = sdcl.storage.get(cacheKey);
+
         var wisdomText = "";
 
         if (cachedWisdom) {
@@ -64,7 +65,7 @@ function fetchEvents(config) {
         var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
         var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
 
-        events.push({
+        var event = {
             title: "今日智慧语录",
             startDate: sdcl.date.format(startTime.getTime() / 1000),
             endDate: sdcl.date.format(endTime.getTime() / 1000),
@@ -74,7 +75,9 @@ function fetchEvents(config) {
             isPointInTime: false,
             href: null,
             imageURL: null
-        });
+        };
+
+        events.push(event);
 
         return events;
 

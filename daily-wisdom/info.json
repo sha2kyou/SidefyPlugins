@@ -1,7 +1,7 @@
 {
     "name": "每日智慧语录",
     "description": "使用 AI 生成个性化智慧语录，每天显示一条全天日程，每3小时智能更新内容。自动跟随应用语言，支持多种风格。",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.9.9",
     "tags": [
