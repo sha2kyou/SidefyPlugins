@@ -13,44 +13,7 @@
         "多语言"
     ],
     "category": "生活工具",
-    "config_options": {
-        "style": {
-            "type": "select",
-            "default": "励志",
-            "required": true,
-            "description": "语录风格",
-            "options": [
-                { "value": "励志", "label": "励志向上" },
-                { "value": "哲理", "label": "哲理思辨" },
-                { "value": "诗意", "label": "诗意美学" },
-                { "value": "实用", "label": "实用智慧" },
-                { "value": "幽默", "label": "幽默风趣" }
-            ]
-        },
-        "language": {
-            "type": "select",
-            "default": "自动",
-            "required": true,
-            "description": "语言偏好",
-            "options": [
-                { "value": "自动", "label": "跟随应用语言" },
-                { "value": "中文", "label": "中文" },
-                { "value": "英文", "label": "English" },
-                { "value": "双语", "label": "中英双语" }
-            ]
-        },
-        "time": {
-            "type": "select",
-            "default": "morning",
-            "required": true,
-            "description": "显示时间",
-            "options": [
-                { "value": "morning", "label": "早晨 (7:00-9:00)" },
-                { "value": "afternoon", "label": "下午 (14:00-16:00)" },
-                { "value": "evening", "label": "傍晚 (18:00-20:00)" }
-            ]
-        }
-    },
+    "config_options": {},
     "requirements": {
         "network": false,
         "storage": true,
