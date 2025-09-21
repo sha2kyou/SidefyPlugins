@@ -1,89 +1,87 @@
 // 每日智慧语录插件 - 每天一条全天日程，每3小时更新内容
 function fetchEvents(config) {
-    try {
-        var events = [];
-        var now = new Date();
+    var events = [];
+    var now = new Date();
 
-        // 根据应用语言自动选择语言
-        var language = getLanguageByApp();
+    // 根据应用语言自动选择语言
+    var language = getLanguageByApp();
 
-        // 生成今天的缓存键
-        var dateKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-        var cacheKey = "daily_wisdom_" + dateKey;
+    // 生成今天的缓存键
+    var dateKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    var cacheKey = "daily_wisdom_v4_" + dateKey;
 
-        // 尝试从缓存获取今日语录
-        var cachedWisdom = sdcl.storage.get(cacheKey);
+    // 尝试从缓存获取今日语录
+    var cachedWisdom = sdcl.storage.get(cacheKey);
 
-        var wisdomText = "";
+    var wisdomText = "";
 
-        if (cachedWisdom) {
-            wisdomText = cachedWisdom;
-        } else {
-            // 生成新的智慧语录
-            var randomStyle = getRandomStyle();
-            var dateContext = generateDateContext(now);
-            var prompt = buildPrompt(randomStyle, language, dateContext);
+    if (cachedWisdom) {
+        wisdomText = cachedWisdom;
+    } else {
+        // 生成新的智慧语录
+        var randomStyle = getRandomStyle();
+        var dateContext = generateDateContext(now);
+        var prompt = buildPrompt(randomStyle, language, dateContext);
 
-            // 调用AI生成语录
-            wisdomText = sdcl.ai.chat(prompt);
+        // 调用AI生成语录
+        wisdomText = sdcl.ai.chat(prompt);
 
-            // 计算到今天结束的剩余分钟数
-            var remainingMinutes = getRemainingMinutesToday();
-
-            // 缓存语录
-            if (wisdomText && wisdomText.indexOf("Error:") !== 0) {
-                sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
-            } else {
-                // AI调用失败时的备用语录
-                wisdomText = getFallbackWisdom(getRandomStyle(), language);
-            }
+        // 检查AI返回结果，有问题直接抛出异常
+        if (!wisdomText || wisdomText.trim() === "" || wisdomText.indexOf("Error:") === 0) {
+            throw new Error("AI调用失败或返回无效内容: " + wisdomText);
         }
 
-        // 检查是否需要更新语录（每3小时检查一次）
-        var updateKey = "wisdom_last_update_" + dateKey;
-        var lastUpdate = sdcl.storage.get(updateKey);
-        var currentTime = now.getTime();
-        var threeHours = 3 * 60 * 60 * 1000; // 3小时的毫秒数
+        // 计算到今天结束的剩余分钟数
+        var remainingMinutes = getRemainingMinutesToday();
 
-        if (!lastUpdate || (currentTime - lastUpdate) >= threeHours) {
-            // 需要更新语录
-            var newStyle = getRandomStyle();
-            var newPrompt = buildPrompt(newStyle, language, dateContext);
-            var newWisdom = sdcl.ai.chat(newPrompt);
-
-            if (newWisdom && newWisdom.indexOf("Error:") !== 0) {
-                wisdomText = newWisdom;
-                // 更新缓存
-                var remainingMinutes = getRemainingMinutesToday();
-                sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
-                sdcl.storage.set(updateKey, currentTime, remainingMinutes);
-            }
-        }
-
-        // 创建全天智慧语录事件
-        var today = new Date();
-        var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-        var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
-
-        var event = {
-            title: "今日智慧语录",
-            startDate: sdcl.date.format(startTime.getTime() / 1000),
-            endDate: sdcl.date.format(endTime.getTime() / 1000),
-            color: getRandomColor(),
-            notes: wisdomText,
-            isAllDay: true,
-            isPointInTime: false,
-            href: null,
-            imageURL: null
-        };
-
-        events.push(event);
-
-        return events;
-
-    } catch (error) {
-        return [];
+        // 缓存语录
+        sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
     }
+
+    // 检查是否需要更新语录（每3小时检查一次）
+    var updateKey = "wisdom_last_update_v4_" + dateKey;
+    var lastUpdate = sdcl.storage.get(updateKey);
+    var currentTime = now.getTime();
+    var threeHours = 3 * 60 * 60 * 1000; // 3小时的毫秒数
+
+    if (!lastUpdate || (currentTime - lastUpdate) >= threeHours) {
+        // 需要更新语录
+        var newStyle = getRandomStyle();
+        var newPrompt = buildPrompt(newStyle, language, dateContext);
+        var newWisdom = sdcl.ai.chat(newPrompt);
+
+        // 检查AI返回结果，有问题直接抛出异常
+        if (!newWisdom || newWisdom.trim() === "" || newWisdom.indexOf("Error:") === 0) {
+            throw new Error("AI调用失败或返回无效内容: " + newWisdom);
+        }
+
+        wisdomText = newWisdom;
+        // 更新缓存
+        var remainingMinutes = getRemainingMinutesToday();
+        sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
+        sdcl.storage.set(updateKey, currentTime, remainingMinutes);
+    }
+
+    // 创建全天智慧语录事件
+    var today = new Date();
+    var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+    var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+
+    var event = {
+        title: "今日智慧语录",
+        startDate: sdcl.date.format(startTime.getTime() / 1000),
+        endDate: sdcl.date.format(endTime.getTime() / 1000),
+        color: getRandomColor(),
+        notes: wisdomText,
+        isAllDay: true,
+        isPointInTime: false,
+        href: null,
+        imageURL: null
+    };
+
+    events.push(event);
+
+    return events;
 }
 
 // 根据应用语言自动选择语言
@@ -232,37 +230,3 @@ function getEnglishStyle(style) {
     return englishStyles[style] || "inspirational";
 }
 
-// 备用语录（AI调用失败时使用）
-function getFallbackWisdom(style, language) {
-    var fallbacks = {
-        "励志": {
-            "中文": "每一天都是新的开始，相信自己的力量！",
-            "英文": "Every day is a new beginning, believe in your strength!",
-            "双语": "每一天都是新的开始，相信自己的力量！ | Every day is a new beginning, believe in your strength!"
-        },
-        "哲理": {
-            "中文": "生活不在于拥有什么，而在于如何看待拥有的一切。",
-            "英文": "Life is not about what you have, but how you perceive what you have.",
-            "双语": "生活不在于拥有什么，而在于如何看待拥有的一切。 | Life is not about what you have, but how you perceive what you have."
-        },
-        "诗意": {
-            "中文": "时光荏苒，愿你在平凡的日子里，发现不平凡的美好。",
-            "英文": "Time flows gently, may you find extraordinary beauty in ordinary days.",
-            "双语": "时光荏苒，愿你在平凡的日子里，发现不平凡的美好。 | Time flows gently, may you find extraordinary beauty in ordinary days."
-        },
-        "实用": {
-            "中文": "今天做一件让明天的自己感谢的事情。",
-            "英文": "Do something today that your future self will thank you for.",
-            "双语": "今天做一件让明天的自己感谢的事情。 | Do something today that your future self will thank you for."
-        },
-        "幽默": {
-            "中文": "生活就像咖啡，苦一点没关系，加点糖就甜了！",
-            "英文": "Life is like coffee, a little bitter is okay, just add some sugar!",
-            "双语": "生活就像咖啡，苦一点没关系，加点糖就甜了！ | Life is like coffee, a little bitter is okay, just add some sugar!"
-        }
-    };
-
-    return fallbacks[style] && fallbacks[style][language]
-        ? fallbacks[style][language]
-        : "保持微笑，拥抱今天！ | Keep smiling and embrace today!";
-}
