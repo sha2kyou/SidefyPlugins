@@ -1,8 +1,8 @@
 {
     "name": "Bilibili 用户视频",
     "description": "追踪指定B站UP主的最新视频投稿，实时显示视频标题、播放量、发布时间等信息",
-    "version": "0.1.17",
-    "author": "sha2kyou",
+    "version": "0.1.18",
+    "author": "Sidefy Team",
     "min_support_app_version": "2025.9.0",
     "tags": [
         "bilibili",
