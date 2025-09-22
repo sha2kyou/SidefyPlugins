@@ -8,7 +8,7 @@ function fetchEvents(config) {
 
     // 生成今天的缓存键
     var dateKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-    var cacheKey = "daily_wisdom_v4_" + dateKey;
+    var cacheKey = "daily_wisdom_v5_" + dateKey;
 
     // 尝试从缓存获取今日语录
     var cachedWisdom = sdcl.storage.get(cacheKey);
@@ -20,8 +20,7 @@ function fetchEvents(config) {
     } else {
         // 生成新的智慧语录
         var randomStyle = getRandomStyle();
-        var dateContext = generateDateContext(now);
-        var prompt = buildPrompt(randomStyle, language, dateContext);
+        var prompt = buildPrompt(randomStyle, language);
 
         // 调用AI生成语录
         wisdomText = sdcl.ai.chat(prompt);
@@ -47,7 +46,7 @@ function fetchEvents(config) {
     if (!lastUpdate || (currentTime - lastUpdate) >= threeHours) {
         // 需要更新语录
         var newStyle = getRandomStyle();
-        var newPrompt = buildPrompt(newStyle, language, dateContext);
+        var newPrompt = buildPrompt(newStyle, language);
         var newWisdom = sdcl.ai.chat(newPrompt);
 
         // 检查AI返回结果，有问题直接抛出异常
@@ -145,76 +144,69 @@ function getRemainingMinutesToday() {
     return Math.max(remainingMinutes, 5);
 }
 
-// 生成日期上下文信息
-function generateDateContext(date) {
-    var month = date.getMonth() + 1;
-    var dayOfWeek = ["日", "一", "二", "三", "四", "五", "六"][date.getDay()];
-    var hour = date.getHours();
-
-    // 季节判断
-    var season = "";
-    if (month >= 3 && month <= 5) season = "春天";
-    else if (month >= 6 && month <= 8) season = "夏天";
-    else if (month >= 9 && month <= 11) season = "秋天";
-    else season = "冬天";
-
-    // 时间段判断
-    var timePeriod = "";
-    if (hour >= 0 && hour < 6) timePeriod = "深夜凌晨";
-    else if (hour >= 6 && hour < 12) timePeriod = "清晨上午";
-    else if (hour >= 12 && hour < 18) timePeriod = "中午下午";
-    else timePeriod = "傍晚夜晚";
-
-    return {
-        season: season,
-        month: month,
-        dayOfWeek: dayOfWeek,
-        date: date.getDate(),
-        timePeriod: timePeriod
-    };
-}
 
 // 构建AI提示词
-function buildPrompt(style, language, context) {
+function buildPrompt(style, language) {
     var basePrompt = "";
 
     // 基础设定
     if (language === "中文") {
-        basePrompt = "请生成一条" + style + "的智慧语录，";
+        basePrompt = "请生成一条" + style + "的智慧语录。";
     } else if (language === "英文") {
-        basePrompt = "Please generate an " + getEnglishStyle(style) + " wisdom quote, ";
-    } else { // 双语
-        basePrompt = "请生成一条" + style + "的智慧语录，同时提供中英文版本，";
+        basePrompt = "Please generate an " + getEnglishStyle(style) + " wisdom quote. ";
+    } else if (language === "日语") {
+        basePrompt = getJapaneseStyle(style) + "な知恵の言葉を生成してください。";
+    } else if (language === "韩语") {
+        basePrompt = getKoreanStyle(style) + " 지혜로운 명언을 생성해주세요.";
+    } else if (language === "德语") {
+        basePrompt = "Bitte generieren Sie ein " + getGermanStyle(style) + " Weisheitszitat. ";
+    } else if (language === "法语") {
+        basePrompt = "Veuillez générer une citation de sagesse " + getFrenchStyle(style) + ". ";
+    } else if (language === "西班牙语") {
+        basePrompt = "Por favor genera una cita de sabiduría " + getSpanishStyle(style) + ". ";
+    } else if (language === "葡萄牙语") {
+        basePrompt = "Por favor gere uma citação de sabedoria " + getPortugueseStyle(style) + ". ";
+    } else if (language === "俄语") {
+        basePrompt = "Пожалуйста, создайте " + getRussianStyle(style) + " мудрую цитату. ";
+    } else {
+        basePrompt = "Please generate an " + getEnglishStyle(style) + " wisdom quote. "; // 默认英文
     }
-
-    // 添加时间和季节上下文
-    var contextPrompt = "现在是" + context.season + "，星期" + context.dayOfWeek + "，" + context.month + "月" + context.date + "日的" + context.timePeriod + "。";
 
     // 风格指导
     var styleGuide = getStyleGuide(style, language);
 
     // 格式要求
     var formatRequirement = "";
-    if (language === "双语") {
-        formatRequirement = "请用这种格式：中文语录 | English Quote";
-    } else {
+    if (language === "中文") {
         formatRequirement = "请直接返回语录内容，不要添加额外说明。语录应该简洁有力，不超过100字。";
+    } else {
+        formatRequirement = " Please return only the quote content without additional explanations. The quote should be concise and powerful, no more than 100 characters.";
     }
 
-    return basePrompt + contextPrompt + styleGuide + formatRequirement;
+    return basePrompt + styleGuide + formatRequirement;
 }
 
 // 获取风格指导
 function getStyleGuide(style, language) {
-    var guides = {
-        "励志": "要积极向上，能激发人的斗志和动力。",
-        "哲理": "要有深度思考，引发人对生活和人生的思辨。",
-        "诗意": "要优美动人，富有诗歌般的意境和美感。",
-        "实用": "要贴近生活，给出具体可行的人生建议。",
-        "幽默": "要轻松风趣，能让人会心一笑且有所感悟。"
-    };
-
-    return guides[style] || guides["励志"];
+    if (language === "中文") {
+        var guides = {
+            "励志": "要积极向上，能激发人的斗志和动力。",
+            "哲理": "要有深度思考，引发人对生活和人生的思辨。",
+            "诗意": "要优美动人，富有诗歌般的意境和美感。",
+            "实用": "要贴近生活，给出具体可行的人生建议。",
+            "幽默": "要轻松风趣，能让人会心一笑且有所感悟。"
+        };
+        return guides[style] || guides["励志"];
+    } else {
+        var englishGuides = {
+            "励志": " Make it positive and uplifting, inspiring motivation and drive.",
+            "哲理": " Make it thoughtful and deep, provoking reflection on life and existence.",
+            "诗意": " Make it beautiful and moving, with poetic imagery and aesthetic appeal.",
+            "实用": " Make it practical and relatable, offering concrete life advice.",
+            "幽默": " Make it light and witty, bringing a smile while providing insight."
+        };
+        return englishGuides[style] || englishGuides["励志"];
+    }
 }
 
 // 获取英文风格对应词
@@ -228,5 +220,89 @@ function getEnglishStyle(style) {
     };
 
     return englishStyles[style] || "inspirational";
+}
+
+function getJapaneseStyle(style) {
+    var japaneseStyles = {
+        "励志": "励志的",
+        "哲理": "哲学的",
+        "诗意": "詩的",
+        "实用": "実用的",
+        "幽默": "ユーモラス"
+    };
+
+    return japaneseStyles[style] || "励志的";
+}
+
+function getKoreanStyle(style) {
+    var koreanStyles = {
+        "励志": "영감을 주는",
+        "哲理": "철학적인",
+        "诗意": "시적인",
+        "实用": "실용적인",
+        "幽默": "유머러스한"
+    };
+
+    return koreanStyles[style] || "영감을 주는";
+}
+
+function getGermanStyle(style) {
+    var germanStyles = {
+        "励志": "inspirierendes",
+        "哲理": "philosophisches",
+        "诗意": "poetisches",
+        "实用": "praktisches",
+        "幽默": "humorvolles"
+    };
+
+    return germanStyles[style] || "inspirierendes";
+}
+
+function getFrenchStyle(style) {
+    var frenchStyles = {
+        "励志": "inspirante",
+        "哲理": "philosophique",
+        "诗意": "poétique",
+        "实用": "pratique",
+        "幽默": "humoristique"
+    };
+
+    return frenchStyles[style] || "inspirante";
+}
+
+function getSpanishStyle(style) {
+    var spanishStyles = {
+        "励志": "inspiradora",
+        "哲理": "filosófica",
+        "诗意": "poética",
+        "实用": "práctica",
+        "幽默": "humorística"
+    };
+
+    return spanishStyles[style] || "inspiradora";
+}
+
+function getPortugueseStyle(style) {
+    var portugueseStyles = {
+        "励志": "inspiradora",
+        "哲理": "filosófica",
+        "诗意": "poética",
+        "实用": "prática",
+        "幽默": "humorística"
+    };
+
+    return portugueseStyles[style] || "inspiradora";
+}
+
+function getRussianStyle(style) {
+    var russianStyles = {
+        "励志": "вдохновляющую",
+        "哲理": "философскую",
+        "诗意": "поэтическую",
+        "实用": "практическую",
+        "幽默": "юмористическую"
+    };
+
+    return russianStyles[style] || "вдохновляющую";
 }
 
