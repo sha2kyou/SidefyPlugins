@@ -14,7 +14,7 @@ function fetchEvents(config) {
         }
 
         if (tokens.length === 0) {
-            scl.log("未配置代币列表，请在 config.tokens 中设置");
+            sidefy.log("未配置代币列表，请在 config.tokens 中设置");
             return events;
         }
 
@@ -27,7 +27,7 @@ function fetchEvents(config) {
                     "Accept": "application/json"
                 };
 
-                var response = scl.httpGet(url, headers);
+                var response = sidefy.http.get(url, headers);
                 if (response) {
                     var data = JSON.parse(response);
 
@@ -88,8 +88,8 @@ function fetchEvents(config) {
 
                             events.push({
                                 title: title,
-                                startDate: scl.formatDate(updateTime.getTime() / 1000),
-                                endDate: scl.formatDate(endTime.getTime() / 1000),
+                                startDate: sidefy.formatDate(updateTime.getTime() / 1000),
+                                endDate: sidefy.formatDate(endTime.getTime() / 1000),
                                 color: color,
                                 notes: "Solana 代币价格 - " + tokenKey.toUpperCase() + "\n价格: $" + data.price + "\n24h变化: " + priceChange.toFixed(2) + "%" +
                                     (config[watcherKey] !== undefined ? (direction === 'up' ? "\n⚠️ 价格高于监控阈值: $" + config[watcherKey] : "\n⚠️ 价格低于监控阈值: $" + config[watcherKey]) : ""),
@@ -104,9 +104,9 @@ function fetchEvents(config) {
             }
         });
 
-        scl.log("获取了 " + events.length + " 个 Solana 代币价格数据");
+        sidefy.log("获取了 " + events.length + " 个 Solana 代币价格数据");
     } catch (err) {
-        scl.log("Phantom API 请求失败: " + err.message);
+        sidefy.log("Phantom API 请求失败: " + err.message);
     }
 
     return events;
