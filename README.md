@@ -39,12 +39,14 @@ your-plugin-name/
       "description": "每次获取的视频数量"
     }
   },
-  //如果不申请正确的权限，则无法进行对应的操作
+  //如果不申请正确的权限，则无法进行对应的操作。不配置默认都是 false
   "requirements": {
-    //网络权限
+    //网络权限：限制单次请求超时30秒
     "network": true,
-    //存储权限：最大限制存储16k数据
-    "storage": true
+    //存储权限：最大限制存储16k数据，最大存储5条数据
+    "storage": true,
+    //AI 权限：使用用户在高级设置配置的大模型能力，最大限制每5分钟请求5次，单次请求超时30秒
+    "ai": false
   }
 }
 ```
@@ -59,7 +61,6 @@ function fetchEvents(config) {
 
   try {
     // 你的业务逻辑
-
     events.push({
       title: "事件标题",
       startDate: "2024-01-01T10:00:00Z", // 必需，ISO8601格式
@@ -69,7 +70,7 @@ function fetchEvents(config) {
       icon: "https://example.com/icon.png", // 可选
       isAllDay: false, // 必需
       isPointInTime: true, // 必需
-      href: "https://example.com", // 可选，点击跳转
+      href: "https://example.com", // 可选，点击跳转。支持 http/https/popup(自定义协议，跳转会弹出macOS文本框显示文本)
     });
   } catch (err) {
   }
