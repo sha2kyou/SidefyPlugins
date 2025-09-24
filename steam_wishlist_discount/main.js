@@ -14,33 +14,13 @@ function fetchEvents(config) {
 
 
 
-    // --- 半小时缓存逻辑 ---
-    var now = new Date();
-    var currentHour = now.getHours();
-    var currentMinute = now.getMinutes();
-
-    // 计算当前半小时时间段（0:00, 0:30, 1:00, 1:30, ...）
-    var halfHourSlot = Math.floor(currentMinute / 30);
-    var timeSlot = currentHour + ":" + (halfHourSlot * 30);
-    var dateString = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-    var cacheKey = "steam_wishlist_discount_v10_" + steamId + "_" + dateString + "_" + timeSlot;
+    // --- 缓存逻辑 ---
+    var cacheKey = "steam_wishlist_discount_v10_" + steamId;
 
     var cachedData = sdcl.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
     }
-
-    // 计算到下一个半小时检查点的剩余分钟数
-    var nextCheckMinute = (halfHourSlot + 1) * 30;
-    var nextCheckTime = new Date(now);
-
-    if (nextCheckMinute >= 60) {
-        nextCheckTime.setHours(currentHour + 1, 0, 0, 0);
-    } else {
-        nextCheckTime.setHours(currentHour, nextCheckMinute, 0, 0);
-    }
-
-    var remainingMinutes = Math.ceil((nextCheckTime.getTime() - now.getTime()) / (1000 * 60));
 
     // --- Steam 愿望单打折检查逻辑 ---
     var events = [];
@@ -97,7 +77,7 @@ function fetchEvents(config) {
             });
 
             // 缓存空结果（30分钟）
-            sdcl.storage.set(cacheKey, events, remainingMinutes);
+            sdcl.storage.set(cacheKey, events, 30);
             return events;
         }
 
@@ -216,7 +196,7 @@ function fetchEvents(config) {
 
         // 将成功获取的事件缓存30分钟
         if (events.length > 0) {
-            sdcl.storage.set(cacheKey, events, remainingMinutes);
+            sdcl.storage.set(cacheKey, events, 30);
         } else {
         }
 
