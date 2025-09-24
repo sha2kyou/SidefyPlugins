@@ -29,7 +29,7 @@ function fetchEvents(config) {
 
     try {
         // 检查缓存
-        var cachedData = sdcl.storage.get(cacheKey);
+        var cachedData = sidefy.storage.get(cacheKey);
         if (cachedData) {
             return cachedData;
         }
@@ -51,8 +51,7 @@ function fetchEvents(config) {
         };
 
         // 发送请求
-        sidefy.log("[GitHub通知] 请求URL: " + url);
-        var response = sdcl.http.get(url, headers);
+        var response = sidefy.http.get(url, headers);
 
         if (!response || response.length === 0) {
             throw new Error("GitHub API 返回空响应");
@@ -99,17 +98,14 @@ function fetchEvents(config) {
                 href: getNotificationUrl(notification)
             };
 
-            sidefy.log("[GitHub通知] 添加事件: " + title + " | 开始时间: " + localStartTime.toISOString() + " | 今天日期: " + new Date().toDateString());
             events.push(event);
         });
-
-        sidefy.log("[GitHub通知] 最终事件数: " + events.length);
 
         // 缓存结果 - 10分钟缓存
         var cacheOptions = {
             ttl: 10 * 60 * 1000
         };
-        sdcl.storage.set(cacheKey, events, cacheOptions);
+        sidefy.storage.set(cacheKey, events, cacheOptions);
 
         return events;
 
