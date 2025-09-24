@@ -28,12 +28,12 @@
         "showParticipating": {
             "type": "string",
             "default": "",
-            "description": "显示参与的通知（@提及、分配等）: true/false"
+            "description": "显示参与的通知（@提及、分配等）"
         },
         "showAll": {
             "type": "string",
-            "default": "true",
-            "description": "显示所有通知（包括仓库订阅）: true/false"
+            "default": "",
+            "description": "显示所有通知（包括仓库订阅）"
         },
         "notificationTypes": {
             "type": "string",
