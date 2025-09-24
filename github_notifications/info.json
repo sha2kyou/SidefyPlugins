@@ -1,0 +1,48 @@
+{
+    "name": "GitHub 通知",
+    "description": "获取 GitHub 通知和订阅信息，包括 @提及、issue分配、PR审查请求等。支持筛选不同类型的通知并在日历中显示。",
+    "version": "0.1.0",
+    "author": "Sidefy Team",
+    "min_support_app_version": "2025.9.0",
+    "tags": [
+        "GitHub",
+        "通知",
+        "开发",
+        "协作",
+        "提醒",
+        "开发工具"
+    ],
+    "category": "开发工具",
+    "config_options": {
+        "token": {
+            "type": "password",
+            "default": "",
+            "required": true,
+            "description": "GitHub Personal Access Token（需要 notifications 权限）"
+        },
+        "limit": {
+            "type": "number",
+            "default": 20,
+            "description": "获取通知数量（1-50）"
+        },
+        "showParticipating": {
+            "type": "boolean",
+            "default": false,
+            "description": "显示参与的通知（@提及、分配等）"
+        },
+        "showAll": {
+            "type": "boolean",
+            "default": true,
+            "description": "显示所有通知（包括仓库订阅）"
+        },
+        "notificationTypes": {
+            "type": "string",
+            "default": "",
+            "description": "通知类型筛选，逗号分隔（空白表示显示全部）: mention,assign,review_requested,subscribed,team_mention,author,manual"
+        }
+    },
+    "requirements": {
+        "network": true,
+        "storage": true
+    }
+}
