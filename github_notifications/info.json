@@ -1,7 +1,7 @@
 {
     "name": "GitHub 通知",
     "description": "获取 GitHub 通知和订阅信息，包括 @提及、issue分配、PR审查请求等。支持筛选不同类型的通知并在日历中显示。",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.9.0",
     "tags": [

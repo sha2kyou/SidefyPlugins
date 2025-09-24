@@ -139,7 +139,8 @@ function getNotificationTypeText(reason) {
         "manual": "手动订阅",
         "comment": "评论",
         "pull_request": "PR",
-        "issue": "Issue"
+        "issue": "Issue",
+        "state_change": "状态变更"
     };
 
     return typeMap[reason] || reason;
@@ -157,7 +158,8 @@ function getNotificationColor(reason) {
         "manual": "#98D8C8",           // 浅绿 - 手动订阅
         "comment": "#FFB347",          // 橙色 - 评论
         "pull_request": "#87CEEB",     // 天蓝 - PR
-        "issue": "#F7DC6F"             // 浅黄 - Issue
+        "issue": "#F7DC6F",             // 浅黄 - Issue
+        "state_change": "#FF8C94"        // 粉红色 - 状态变更
     };
 
     return colorMap[reason] || "#95A5A6";
@@ -197,7 +199,8 @@ function getReasonDescription(reason) {
         "manual": "你手动订阅了此通知",
         "comment": "有新的评论",
         "pull_request": "Pull Request 有更新",
-        "issue": "Issue 有更新"
+        "issue": "Issue 有更新",
+        "state_change": "Issue或PR状态发生变更"
     };
 
     return descriptions[reason] || "";
