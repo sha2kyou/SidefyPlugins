@@ -34,5 +34,7 @@
     "requirements": {
         "network": true,
         "storage": true
-    }
+    },
+    "discontinued": true,
+    "discontinued_reason": "由于GitHub官方API数据存在固有的高延迟问题，用户活动事件数据更新不及时，往往延迟数小时甚至更长时间。这导致插件无法提供实时准确的用户活动信息，严重影响用户体验。同时GitHub的API调用限制较为严格，频繁请求可能触发限流。考虑到这些API层面的技术限制，决定停止维护此插件。"
 }
