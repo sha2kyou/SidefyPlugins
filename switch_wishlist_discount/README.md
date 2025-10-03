@@ -1,5 +1,7 @@
 ## Switch 愿望单打折监控插件 (日本区)
 
+<img width="486" height="370" alt="1Capture_2025-10-03_22 14 53" src="https://github.com/user-attachments/assets/a2b6c7a0-b140-4044-a19c-33fb75ddd807" />
+
 监控您的 Nintendo Switch 愿望单游戏打折信息(仅支持日本 eShop)，当有游戏打折时在日历中提醒您。
 
 ### 功能特性
