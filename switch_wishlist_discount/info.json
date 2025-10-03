@@ -1,0 +1,29 @@
+{
+    "name": "Switch 愿望单打折监控 (日本区)",
+    "description": "监控您的 Nintendo Switch 愿望单游戏打折信息(仅支持日本 eShop)，当有游戏打折时在日历中提醒您，显示原价、现价和折扣详情。",
+    "version": "0.0.1",
+    "author": "sha2kyou",
+    "min_support_app_version": "2025.9.0",
+    "tags": [
+        "switch",
+        "nintendo",
+        "愿望单",
+        "打折",
+        "游戏",
+        "折扣",
+        "监控"
+    ],
+    "category": "游戏与娱乐",
+    "config_options": {
+        "game_ids": {
+            "type": "text",
+            "default": "",
+            "required": true,
+            "description": "要监控的游戏 ID (NSUID) 列表，多个 ID 用逗号分隔，最多支持10个游戏。示例：70010000063514,70010000027619"
+        }
+    },
+    "requirements": {
+        "network": true,
+        "storage": true
+    }
+}
