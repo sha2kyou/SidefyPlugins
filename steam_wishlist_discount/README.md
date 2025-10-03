@@ -1,5 +1,7 @@
 ## Steam 愿望单打折监控插件
 
+<img width="489" height="255" alt="1Capture_2025-10-03_21 59 33" src="https://github.com/user-attachments/assets/756f4b89-b847-41b3-9a34-1310266beccc" />
+
 每30分钟检查一次您的 Steam 愿望单中游戏的打折信息，当有游戏打折时在日历中提醒您。
 
 ### 功能特性
