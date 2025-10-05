@@ -51,7 +51,7 @@ function fetchEvents(config) {
      * 获取今天的缓存 key
      */
     function getCacheKey() {
-        return "bili_poll_v3_" + getTodayKey();
+        return "bili_poll_v4_" + getTodayKey();
     }
 
     /**
