@@ -1,5 +1,7 @@
 ## Bilibili 用户视频插件
 
+<img width="486" height="272" alt="image" src="https://github.com/user-attachments/assets/a7dd5fc0-a753-48df-8337-03e80f523c40" />
+
 获取指定 B 站 UP 主的当日视频投稿，在时间线上显示视频信息。
 
 ### 功能特性
