@@ -142,9 +142,8 @@ function fetchEvents(config) {
 
             // 设置为当天的全天事件（本地时间）
             var eventDate = new Date();
-            var timezoneOffset = eventDate.getTimezoneOffset();
             eventDate.setHours(0, 0, 0, 0);
-            eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
+            var timestamp = eventDate.getTime() / 1000;
 
             var discountColor = getDiscountColor(game.discountPercent);
             var notes = "原价: " + game.regularPrice + "\n" +
@@ -158,8 +157,8 @@ function fetchEvents(config) {
 
             var gameEvent = {
                 title: game.name + " (-" + game.discountPercent + "%)",
-                startDate: sdcl.date.format(eventDate.getTime() / 1000),
-                endDate: sdcl.date.format(eventDate.getTime() / 1000),
+                startDate: sdcl.date.format(timestamp),
+                endDate: sdcl.date.format(timestamp),
                 color: discountColor,
                 notes: notes,
                 href: game.url,

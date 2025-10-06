@@ -60,22 +60,7 @@ function fetchEvents(config) {
 
 
         if (gameItems.length === 0) {
-            // 如果愿望单为空，创建一个提示事件
-            var eventDate = new Date();
-            var timezoneOffset = eventDate.getTimezoneOffset();
-            eventDate.setHours(0, 0, 0, 0);
-            eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
-
-            events.push({
-                title: "Steam 愿望单为空",
-                startDate: sdcl.date.format(eventDate.getTime() / 1000),
-                endDate: sdcl.date.format(eventDate.getTime() / 1000),
-                color: "#666666",
-                notes: "您的 Steam 愿望单中没有游戏，或者愿望单未设置为公开。",
-                isAllDay: true,
-                isPointInTime: true
-            });
-
+            // 如果愿望单为空，不显示任何事件
             // 缓存空结果（30分钟）
             sdcl.storage.set(cacheKey, events, 30);
             return events;
@@ -141,36 +126,15 @@ function fetchEvents(config) {
 
 
         // 3. 创建打折游戏的日历事件
-        if (discountedGames.length === 0) {
-            // 如果没有打折游戏，创建一个提示事件
-            var eventDate = new Date();
-            var timezoneOffset = eventDate.getTimezoneOffset();
-            eventDate.setHours(0, 0, 0, 0);
-            eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
-
-            events.push({
-                title: "愿望单暂无打折游戏",
-                startDate: sdcl.date.format(eventDate.getTime() / 1000),
-                endDate: sdcl.date.format(eventDate.getTime() / 1000),
-                color: "#4A90E2",
-                notes: "已检查愿望单中的前 " + gamesToCheck.length + " 个游戏，暂时没有发现打折游戏。",
-                href: "https://steamcommunity.com/id/" + steamId + "/wishlist",
-                isAllDay: true,
-                isPointInTime: true
-            });
-        } else {
+        if (discountedGames.length > 0) {
             // 为每个打折游戏创建事件
             for (var j = 0; j < discountedGames.length; j++) {
                 var game = discountedGames[j];
 
                 // 设置为当天的全天事件（本地时间）
                 var eventDate = new Date();
-                // 获取本地时区偏移量（分钟）
-                var timezoneOffset = eventDate.getTimezoneOffset();
-                // 设置为当天0点本地时间，然后转换为UTC
                 eventDate.setHours(0, 0, 0, 0);
-                // 调整为UTC时间以正确显示
-                eventDate = new Date(eventDate.getTime() - (timezoneOffset * 60 * 1000));
+                var timestamp = eventDate.getTime() / 1000;
 
                 var discountColor = getDiscountColor(game.discountPercent);
                 var notes = "原价: " + game.originalPrice + "\n" +
@@ -179,8 +143,8 @@ function fetchEvents(config) {
 
                 var gameEvent = {
                     title: game.name + " (-" + game.discountPercent + "%)",
-                    startDate: sdcl.date.format(eventDate.getTime() / 1000),
-                    endDate: sdcl.date.format(eventDate.getTime() / 1000),
+                    startDate: sdcl.date.format(timestamp),
+                    endDate: sdcl.date.format(timestamp),
                     color: discountColor,
                     notes: notes,
                     href: game.storeUrl,
