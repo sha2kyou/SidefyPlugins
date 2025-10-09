@@ -9,7 +9,17 @@ function fetchEvents(config) {
     var steamId = config.steam_id;
 
     if (!steamId || steamId.trim() === "") {
-        throw new Error("Steam 用户名不能为空，请在插件配置中填入您的 Steam 用户名。");
+        throw new Error(sdcl.i18n({
+            "zh": "Steam 用户名不能为空，请在插件配置中填入您的 Steam 用户名。",
+            "en": "Steam username cannot be empty, please enter your Steam username in the plugin configuration.",
+            "ja": "Steam ユーザー名を空にすることはできません。プラグイン設定に Steam ユーザー名を入力してください。",
+            "ko": "Steam 사용자 이름은 비워둘 수 없습니다. 플러그인 설정에서 Steam 사용자 이름을 입력하세요.",
+            "de": "Steam-Benutzername darf nicht leer sein. Bitte geben Sie Ihren Steam-Benutzernamen in der Plugin-Konfiguration ein.",
+            "es": "El nombre de usuario de Steam no puede estar vacío. Por favor, ingrese su nombre de usuario de Steam en la configuración del complemento.",
+            "fr": "Le nom d'utilisateur Steam ne peut pas être vide. Veuillez entrer votre nom d'utilisateur Steam dans la configuration du plugin.",
+            "pt": "O nome de usuário do Steam não pode estar vazio. Por favor, insira seu nome de usuário do Steam na configuração do plugin.",
+            "ru": "Имя пользователя Steam не может быть пустым. Пожалуйста, введите имя пользователя Steam в настройках плагина."
+        }));
     }
 
 
@@ -30,13 +40,33 @@ function fetchEvents(config) {
         var steamIdResponse = sdcl.http.get(steamIdUrl);
 
         if (!steamIdResponse) {
-            throw new Error("无法获取Steam用户信息，请检查您的Steam用户名是否正确。");
+            throw new Error(sdcl.i18n({
+                "zh": "无法获取Steam用户信息，请检查您的Steam用户名是否正确。",
+                "en": "Unable to retrieve Steam user information. Please check if your Steam username is correct.",
+                "ja": "Steam ユーザー情報を取得できません。Steam ユーザー名が正しいか確認してください。",
+                "ko": "Steam 사용자 정보를 가져올 수 없습니다. Steam 사용자 이름이 올바른지 확인하세요.",
+                "de": "Steam-Benutzerinformationen können nicht abgerufen werden. Bitte überprüfen Sie, ob Ihr Steam-Benutzername korrekt ist.",
+                "es": "No se puede obtener la información del usuario de Steam. Por favor, verifique si su nombre de usuario de Steam es correcto.",
+                "fr": "Impossible de récupérer les informations de l'utilisateur Steam. Veuillez vérifier si votre nom d'utilisateur Steam est correct.",
+                "pt": "Não foi possível obter as informações do usuário do Steam. Por favor, verifique se seu nome de usuário do Steam está correto.",
+                "ru": "Не удалось получить информацию о пользователе Steam. Пожалуйста, проверьте правильность вашего имени пользователя Steam."
+            }));
         }
 
         // 从XML响应中提取Steam ID
         var steamId64Match = steamIdResponse.match(/<steamID64>(\d+)<\/steamID64>/);
         if (!steamId64Match) {
-            throw new Error("无法找到对应的Steam ID，请确认用户名正确且资料为公开。");
+            throw new Error(sdcl.i18n({
+                "zh": "无法找到对应的Steam ID，请确认用户名正确且资料为公开。",
+                "en": "Cannot find the corresponding Steam ID. Please ensure the username is correct and the profile is public.",
+                "ja": "対応する Steam ID が見つかりません。ユーザー名が正しく、プロフィールが公開されていることを確認してください。",
+                "ko": "해당 Steam ID를 찾을 수 없습니다. 사용자 이름이 올바르고 프로필이 공개되어 있는지 확인하세요.",
+                "de": "Die entsprechende Steam-ID kann nicht gefunden werden. Bitte stellen Sie sicher, dass der Benutzername korrekt ist und das Profil öffentlich ist.",
+                "es": "No se puede encontrar el ID de Steam correspondiente. Por favor, asegúrese de que el nombre de usuario sea correcto y el perfil sea público.",
+                "fr": "Impossible de trouver l'ID Steam correspondant. Veuillez vous assurer que le nom d'utilisateur est correct et que le profil est public.",
+                "pt": "Não foi possível encontrar o ID do Steam correspondente. Por favor, certifique-se de que o nome de usuário está correto e o perfil é público.",
+                "ru": "Не удалось найти соответствующий Steam ID. Пожалуйста, убедитесь, что имя пользователя правильное и профиль является публичным."
+            }));
         }
         var steamId64 = steamId64Match[1];
 
@@ -45,7 +75,17 @@ function fetchEvents(config) {
         var wishlistResponse = sdcl.http.get(wishlistUrl);
 
         if (!wishlistResponse) {
-            throw new Error("无法获取愿望单数据，请检查您的愿望单是否设置为公开。");
+            throw new Error(sdcl.i18n({
+                "zh": "无法获取愿望单数据，请检查您的愿望单是否设置为公开。",
+                "en": "Unable to retrieve wishlist data. Please check if your wishlist is set to public.",
+                "ja": "ウィッシュリストデータを取得できません。ウィッシュリストが公開に設定されているか確認してください。",
+                "ko": "위시리스트 데이터를 가져올 수 없습니다. 위시리스트가 공개로 설정되어 있는지 확인하세요.",
+                "de": "Wunschlisten-Daten können nicht abgerufen werden. Bitte überprüfen Sie, ob Ihre Wunschliste auf öffentlich gesetzt ist.",
+                "es": "No se pueden obtener los datos de la lista de deseos. Por favor, verifique si su lista de deseos está configurada como pública.",
+                "fr": "Impossible de récupérer les données de la liste de souhaits. Veuillez vérifier si votre liste de souhaits est définie sur publique.",
+                "pt": "Não foi possível obter os dados da lista de desejos. Por favor, verifique se sua lista de desejos está definida como pública.",
+                "ru": "Не удалось получить данные списка желаний. Пожалуйста, проверьте, установлен ли ваш список желаний как публичный."
+            }));
         }
 
         var wishlistData = JSON.parse(wishlistResponse);
@@ -137,9 +177,17 @@ function fetchEvents(config) {
                 var timestamp = eventDate.getTime() / 1000;
 
                 var discountColor = getDiscountColor(game.discountPercent);
-                var notes = "原价: " + game.originalPrice + "\n" +
-                           "现价: " + game.finalPrice + "\n" +
-                           "折扣: -" + game.discountPercent + "%";
+                var notes = sdcl.i18n({
+                    "zh": "原价: " + game.originalPrice + "\n现价: " + game.finalPrice + "\n折扣: -" + game.discountPercent + "%",
+                    "en": "Original Price: " + game.originalPrice + "\nCurrent Price: " + game.finalPrice + "\nDiscount: -" + game.discountPercent + "%",
+                    "ja": "元の価格: " + game.originalPrice + "\n現在の価格: " + game.finalPrice + "\n割引: -" + game.discountPercent + "%",
+                    "ko": "원가: " + game.originalPrice + "\n현재 가격: " + game.finalPrice + "\n할인: -" + game.discountPercent + "%",
+                    "de": "Originalpreis: " + game.originalPrice + "\nAktueller Preis: " + game.finalPrice + "\nRabatt: -" + game.discountPercent + "%",
+                    "es": "Precio Original: " + game.originalPrice + "\nPrecio Actual: " + game.finalPrice + "\nDescuento: -" + game.discountPercent + "%",
+                    "fr": "Prix d'origine: " + game.originalPrice + "\nPrix actuel: " + game.finalPrice + "\nRéduction: -" + game.discountPercent + "%",
+                    "pt": "Preço Original: " + game.originalPrice + "\nPreço Atual: " + game.finalPrice + "\nDesconto: -" + game.discountPercent + "%",
+                    "ru": "Исходная цена: " + game.originalPrice + "\nТекущая цена: " + game.finalPrice + "\nСкидка: -" + game.discountPercent + "%"
+                });
 
                 var gameEvent = {
                     title: game.name + " (-" + game.discountPercent + "%)",
@@ -165,7 +213,17 @@ function fetchEvents(config) {
         }
 
     } catch (err) {
-        throw new Error("Steam 愿望单插件执行失败: " + err.message);
+        throw new Error(sdcl.i18n({
+            "zh": "Steam 愿望单插件执行失败: " + err.message,
+            "en": "Steam Wishlist plugin execution failed: " + err.message,
+            "ja": "Steam ウィッシュリストプラグインの実行に失敗しました: " + err.message,
+            "ko": "Steam 위시리스트 플러그인 실행 실패: " + err.message,
+            "de": "Steam-Wunschlisten-Plugin-Ausführung fehlgeschlagen: " + err.message,
+            "es": "Falló la ejecución del complemento de lista de deseos de Steam: " + err.message,
+            "fr": "Échec de l'exécution du plugin de liste de souhaits Steam: " + err.message,
+            "pt": "Falha na execução do plugin da lista de desejos do Steam: " + err.message,
+            "ru": "Ошибка выполнения плагина списка желаний Steam: " + err.message
+        }));
     }
 
     return events;

@@ -1,24 +1,24 @@
 {
-    "name": "Steam 愿望单打折监控",
-    "description": "每30分钟检查一次您的 Steam 愿望单中游戏的打折信息，当有游戏打折时在日历中提醒您。",
-    "version": "0.0.8",
+    "name": "Steam Wishlist Discount Tracker",
+    "description": "Checks your Steam wishlist every 30 minutes for game discounts and reminds you in the calendar when games go on sale.",
+    "version": "0.0.9",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.9.0",
     "tags": [
         "steam",
-        "愿望单",
-        "打折",
-        "游戏",
-        "折扣",
-        "监听"
+        "wishlist",
+        "discount",
+        "game",
+        "sale",
+        "tracker"
     ],
-    "category": "游戏与娱乐",
+    "category": "Gaming & Entertainment",
     "config_options": {
         "steam_id": {
             "type": "text",
             "default": "",
             "required": true,
-            "description": "您的 Steam 用户名 (如：maozhijie)"
+            "description": "Your Steam username (e.g., maozhijie)"
         }
     },
     "requirements": {
