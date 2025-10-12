@@ -1,34 +1,34 @@
 {
-    "name": "GitHub 个人事件",
-    "description": "获取指定 GitHub 用户的公开活动事件，包括推送、fork、star、issue、PR 等活动。支持 token 认证以获得更高的 API 调用限制。",
-    "version": "0.0.7",
+    "name": "GitHub User Events",
+    "description": "Fetch public activity events for a specified GitHub user, including pushes, forks, stars, issues, PRs, and more. Supports token authentication for higher API call limits.",
+    "version": "0.0.8",
     "author": "Sidefy Team",
-    "min_support_app_version": "2025.9.0",
+    "min_support_app_version": "2025.10.0",
     "tags": [
-        "GitHub",
-        "开发",
-        "事件",
-        "活动",
-        "代码",
-        "开发工具"
+        "github",
+        "development",
+        "events",
+        "activity",
+        "code",
+        "devtools"
     ],
-    "category": "开发工具",
+    "category": "Developer Tools",
     "config_options": {
         "username": {
             "type": "string",
             "default": "",
             "required": true,
-            "description": "GitHub 用户名"
+            "description": "GitHub username"
         },
         "token": {
             "type": "password",
             "default": "",
-            "description": "GitHub Personal Access Token（可选）"
+            "description": "GitHub Personal Access Token (optional)"
         },
         "limit": {
             "type": "number",
             "default": 10,
-            "description": "获取事件数量（1-100）"
+            "description": "Number of events to fetch (1-100)"
         }
     },
     "requirements": {
@@ -36,5 +36,5 @@
         "storage": true
     },
     "discontinued": true,
-    "discontinued_reason": "由于GitHub官方API数据存在固有的高延迟问题，用户活动事件数据更新不及时，往往延迟数小时甚至更长时间。这导致插件无法提供实时准确的用户活动信息，严重影响用户体验。同时GitHub的API调用限制较为严格，频繁请求可能触发限流。考虑到这些API层面的技术限制，决定停止维护此插件。"
+    "discontinued_reason": "Due to inherent high latency issues with GitHub's official API, user activity event data updates are not timely, often delayed by hours or longer. This prevents the plugin from providing real-time accurate user activity information, severely impacting user experience. Additionally, GitHub's API call limits are strict, and frequent requests may trigger rate limiting. Given these API-level technical limitations, we have decided to discontinue maintenance of this plugin."
 }

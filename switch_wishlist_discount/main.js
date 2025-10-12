@@ -1,8 +1,6 @@
 /**
  * Switch 愿望单打折监控插件 (日本区)
  * 监控指定的 Nintendo Switch 游戏打折信息，并在日历中显示打折游戏。
- *
- * @author sha2kyou
  */
 function fetchEvents(config) {
 
@@ -10,7 +8,17 @@ function fetchEvents(config) {
     var gameIds = config.game_ids;
 
     if (!gameIds || gameIds.trim() === "") {
-        throw new Error("游戏 ID 列表不能为空，请在插件配置中填入要监控的游戏 ID。");
+        throw new Error(sdcl.i18n({
+            "zh": "游戏 ID 列表不能为空，请在插件配置中填入要监控的游戏 ID。",
+            "en": "Game ID list cannot be empty. Please enter the game IDs you want to monitor in the plugin configuration.",
+            "ja": "ゲーム ID リストを空にすることはできません。プラグイン設定で監視するゲーム ID を入力してください。",
+            "ko": "게임 ID 목록은 비워둘 수 없습니다. 플러그인 설정에서 모니터링할 게임 ID를 입력하세요.",
+            "de": "Die Spiele-ID-Liste darf nicht leer sein. Bitte geben Sie die zu überwachenden Spiele-IDs in der Plugin-Konfiguration ein.",
+            "es": "La lista de ID de juegos no puede estar vacía. Por favor, ingrese los ID de juegos que desea monitorear en la configuración del complemento.",
+            "fr": "La liste des ID de jeux ne peut pas être vide. Veuillez entrer les ID de jeux que vous souhaitez surveiller dans la configuration du plugin.",
+            "pt": "A lista de IDs de jogos não pode estar vazia. Por favor, insira os IDs dos jogos que deseja monitorar na configuração do plugin.",
+            "ru": "Список ID игр не может быть пустым. Пожалуйста, введите ID игр, которые вы хотите отслеживать, в настройках плагина."
+        }));
     }
 
     // 清理游戏 ID（移除可能的字母前缀和空格），并限制最多10个
@@ -43,13 +51,33 @@ function fetchEvents(config) {
         var priceResponse = sdcl.http.get(priceUrl);
 
         if (!priceResponse) {
-            throw new Error("无法获取游戏价格信息，请检查网络连接。");
+            throw new Error(sdcl.i18n({
+                "zh": "无法获取游戏价格信息，请检查网络连接。",
+                "en": "Unable to retrieve game price information. Please check your network connection.",
+                "ja": "ゲーム価格情報を取得できません。ネットワーク接続を確認してください。",
+                "ko": "게임 가격 정보를 가져올 수 없습니다. 네트워크 연결을 확인하세요.",
+                "de": "Spielpreisinformationen können nicht abgerufen werden. Bitte überprüfen Sie Ihre Netzwerkverbindung.",
+                "es": "No se puede obtener la información de precios del juego. Por favor, verifique su conexión de red.",
+                "fr": "Impossible de récupérer les informations de prix du jeu. Veuillez vérifier votre connexion réseau.",
+                "pt": "Não foi possível obter as informações de preço do jogo. Por favor, verifique sua conexão de rede.",
+                "ru": "Не удалось получить информацию о ценах на игры. Пожалуйста, проверьте подключение к сети."
+            }));
         }
 
         var priceData = JSON.parse(priceResponse);
 
         if (!priceData.prices || priceData.prices.length === 0) {
-            throw new Error("未找到游戏价格信息，请检查游戏 ID 是否正确。");
+            throw new Error(sdcl.i18n({
+                "zh": "未找到游戏价格信息，请检查游戏 ID 是否正确。",
+                "en": "Game price information not found. Please check if the game IDs are correct.",
+                "ja": "ゲーム価格情報が見つかりません。ゲーム ID が正しいか確認してください。",
+                "ko": "게임 가격 정보를 찾을 수 없습니다. 게임 ID가 올바른지 확인하세요.",
+                "de": "Spielpreisinformationen nicht gefunden. Bitte überprüfen Sie, ob die Spiele-IDs korrekt sind.",
+                "es": "No se encontró información de precios del juego. Por favor, verifique si los ID de juegos son correctos.",
+                "fr": "Informations de prix du jeu introuvables. Veuillez vérifier si les ID de jeux sont corrects.",
+                "pt": "Informações de preço do jogo não encontradas. Por favor, verifique se os IDs dos jogos estão corretos.",
+                "ru": "Информация о ценах на игры не найдена. Пожалуйста, проверьте правильность ID игр."
+            }));
         }
 
         // 2. 获取游戏信息（优先使用用户配置，否则从日本商店抓取）
@@ -65,7 +93,17 @@ function fetchEvents(config) {
                 var storePage = sdcl.http.get(storeUrl);
 
                 if (storePage) {
-                    var gameName = "游戏 ID: " + gameId;
+                    var gameName = sdcl.i18n({
+                        "zh": "游戏 ID: " + gameId,
+                        "en": "Game ID: " + gameId,
+                        "ja": "ゲーム ID: " + gameId,
+                        "ko": "게임 ID: " + gameId,
+                        "de": "Spiele-ID: " + gameId,
+                        "es": "ID del juego: " + gameId,
+                        "fr": "ID du jeu: " + gameId,
+                        "pt": "ID do jogo: " + gameId,
+                        "ru": "ID игры: " + gameId
+                    });
                     var gameImage = "";
                     var deviceInfo = "";
 
@@ -97,7 +135,17 @@ function fetchEvents(config) {
 
             // 如果都失败，使用游戏 ID 作为名称
             gameInfoMap[gameId] = {
-                name: "游戏 ID: " + gameId,
+                name: sdcl.i18n({
+                    "zh": "游戏 ID: " + gameId,
+                    "en": "Game ID: " + gameId,
+                    "ja": "ゲーム ID: " + gameId,
+                    "ko": "게임 ID: " + gameId,
+                    "de": "Spiele-ID: " + gameId,
+                    "es": "ID del juego: " + gameId,
+                    "fr": "ID du jeu: " + gameId,
+                    "pt": "ID do jogo: " + gameId,
+                    "ru": "ID игры: " + gameId
+                }),
                 image: "",
                 device: ""
             };
@@ -121,7 +169,21 @@ function fetchEvents(config) {
                 var discountPrice = parseFloat(priceInfo.discount_price.raw_value);
                 var discountPercent = Math.round((1 - discountPrice / regularPrice) * 100);
 
-                var gameInfo = gameInfoMap[gameId] || { name: "游戏 ID: " + gameId, image: "", device: "" };
+                var gameInfo = gameInfoMap[gameId] || {
+                    name: sdcl.i18n({
+                        "zh": "游戏 ID: " + gameId,
+                        "en": "Game ID: " + gameId,
+                        "ja": "ゲーム ID: " + gameId,
+                        "ko": "게임 ID: " + gameId,
+                        "de": "Spiele-ID: " + gameId,
+                        "es": "ID del juego: " + gameId,
+                        "fr": "ID du jeu: " + gameId,
+                        "pt": "ID do jogo: " + gameId,
+                        "ru": "ID игры: " + gameId
+                    }),
+                    image: "",
+                    device: ""
+                };
                 discountedGames.push({
                     id: gameId,
                     name: gameInfo.name,
@@ -146,13 +208,31 @@ function fetchEvents(config) {
             var timestamp = eventDate.getTime() / 1000;
 
             var discountColor = getDiscountColor(game.discountPercent);
-            var notes = "原价: " + game.regularPrice + "\n" +
-                       "现价: " + game.discountPrice + "\n" +
-                       "折扣: -" + game.discountPercent + "%";
+            var notes = sdcl.i18n({
+                "zh": "原价: " + game.regularPrice + "\n现价: " + game.discountPrice + "\n折扣: -" + game.discountPercent + "%",
+                "en": "Original Price: " + game.regularPrice + "\nCurrent Price: " + game.discountPrice + "\nDiscount: -" + game.discountPercent + "%",
+                "ja": "元の価格: " + game.regularPrice + "\n現在の価格: " + game.discountPrice + "\n割引: -" + game.discountPercent + "%",
+                "ko": "원가: " + game.regularPrice + "\n현재 가격: " + game.discountPrice + "\n할인: -" + game.discountPercent + "%",
+                "de": "Originalpreis: " + game.regularPrice + "\nAktueller Preis: " + game.discountPrice + "\nRabatt: -" + game.discountPercent + "%",
+                "es": "Precio Original: " + game.regularPrice + "\nPrecio Actual: " + game.discountPrice + "\nDescuento: -" + game.discountPercent + "%",
+                "fr": "Prix d'origine: " + game.regularPrice + "\nPrix actuel: " + game.discountPrice + "\nRéduction: -" + game.discountPercent + "%",
+                "pt": "Preço Original: " + game.regularPrice + "\nPreço Atual: " + game.discountPrice + "\nDesconto: -" + game.discountPercent + "%",
+                "ru": "Исходная цена: " + game.regularPrice + "\nТекущая цена: " + game.discountPrice + "\nСкидка: -" + game.discountPercent + "%"
+            });
 
             // 添加设备兼容性信息
             if (game.device) {
-                notes += "\n对应本体: " + game.device;
+                notes += "\n" + sdcl.i18n({
+                    "zh": "对应本体: " + game.device,
+                    "en": "Compatible Device: " + game.device,
+                    "ja": "対応本体: " + game.device,
+                    "ko": "호환 기기: " + game.device,
+                    "de": "Kompatibles Gerät: " + game.device,
+                    "es": "Dispositivo Compatible: " + game.device,
+                    "fr": "Appareil compatible: " + game.device,
+                    "pt": "Dispositivo Compatível: " + game.device,
+                    "ru": "Совместимое устройство: " + game.device
+                });
             }
 
             var gameEvent = {
@@ -176,7 +256,17 @@ function fetchEvents(config) {
         }
 
     } catch (err) {
-        throw new Error("Switch 愿望单插件执行失败: " + err.message);
+        throw new Error(sdcl.i18n({
+            "zh": "Switch 愿望单插件执行失败: " + err.message,
+            "en": "Switch Wishlist plugin execution failed: " + err.message,
+            "ja": "Switch ウィッシュリストプラグインの実行に失敗しました: " + err.message,
+            "ko": "Switch 위시리스트 플러그인 실행 실패: " + err.message,
+            "de": "Switch-Wunschlisten-Plugin-Ausführung fehlgeschlagen: " + err.message,
+            "es": "Falló la ejecución del complemento de lista de deseos de Switch: " + err.message,
+            "fr": "Échec de l'exécution du plugin de liste de souhaits Switch: " + err.message,
+            "pt": "Falha na execução do plugin da lista de desejos do Switch: " + err.message,
+            "ru": "Ошибка выполнения плагина списка желаний Switch: " + err.message
+        }));
     }
 
     return events;

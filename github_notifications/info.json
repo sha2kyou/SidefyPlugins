@@ -1,44 +1,44 @@
 {
-    "name": "GitHub 通知",
-    "description": "获取 GitHub 通知和订阅信息，包括 @提及、issue分配、PR审查请求等。支持筛选不同类型的通知并在日历中显示。",
-    "version": "0.1.2",
+    "name": "GitHub Notifications",
+    "description": "Fetch GitHub notifications and subscriptions, including @mentions, issue assignments, PR review requests, etc. Supports filtering different types of notifications and displaying them in the calendar.",
+    "version": "0.1.3",
     "author": "Sidefy Team",
-    "min_support_app_version": "2025.9.0",
+    "min_support_app_version": "2025.10.0",
     "tags": [
-        "GitHub",
-        "通知",
-        "开发",
-        "协作",
-        "提醒",
-        "开发工具"
+        "github",
+        "notifications",
+        "development",
+        "collaboration",
+        "alerts",
+        "devtools"
     ],
-    "category": "开发工具",
+    "category": "Developer Tools",
     "config_options": {
         "token": {
             "type": "password",
             "default": "",
             "required": true,
-            "description": "GitHub Personal Access Token（需要 notifications 权限）"
+            "description": "GitHub Personal Access Token (requires notifications permission)"
         },
         "limit": {
             "type": "number",
             "default": 20,
-            "description": "获取通知数量（1-50）"
+            "description": "Number of notifications to fetch (1-50)"
         },
         "showParticipating": {
             "type": "string",
             "default": "",
-            "description": "显示参与的通知（@提及、分配等）"
+            "description": "Show participating notifications (@mentions, assignments, etc.)"
         },
         "showAll": {
             "type": "string",
             "default": "",
-            "description": "显示所有通知（包括仓库订阅）"
+            "description": "Show all notifications (including repository subscriptions)"
         },
         "notificationTypes": {
             "type": "string",
             "default": "",
-            "description": "通知类型筛选，逗号分隔（空白表示显示全部）: mention,assign,review_requested,subscribed,team_mention,author,manual"
+            "description": "Notification type filter, comma-separated (blank means show all): mention,assign,review_requested,subscribed,team_mention,author,manual"
         }
     },
     "requirements": {
@@ -46,5 +46,5 @@
         "storage": true
     },
     "discontinued": true,
-    "discontinued_reason": "由于GitHub官方API数据存在固有的高延迟问题，通知和事件数据更新不及时，往往延迟数小时甚至更长时间。这导致插件无法提供实时准确的信息，严重影响用户体验。同时GitHub的API调用限制较为严格，频繁请求可能触发限流。考虑到这些API层面的技术限制，决定停止维护此插件。"
+    "discontinued_reason": "Due to inherent high latency issues with GitHub's official API, notification and event data updates are not timely, often delayed by hours or longer. This prevents the plugin from providing real-time accurate information, severely impacting user experience. Additionally, GitHub's API call limits are strict, and frequent requests may trigger rate limiting. Given these API-level technical limitations, we have decided to discontinue maintenance of this plugin."
 }

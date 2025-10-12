@@ -10,7 +10,17 @@ function fetchEvents(config) {
     var notificationTypes = config.notificationTypes || "";
 
     if (!token || token.trim() === "") {
-        throw new Error("请配置 GitHub Personal Access Token");
+        throw new Error(sidefy.i18n({
+            "zh": "请配置 GitHub Personal Access Token",
+            "en": "Please configure GitHub Personal Access Token",
+            "ja": "GitHub Personal Access Token を設定してください",
+            "ko": "GitHub Personal Access Token을 설정하세요",
+            "de": "Bitte konfigurieren Sie das GitHub Personal Access Token",
+            "es": "Por favor, configure el GitHub Personal Access Token",
+            "fr": "Veuillez configurer le GitHub Personal Access Token",
+            "pt": "Por favor, configure o GitHub Personal Access Token",
+            "ru": "Пожалуйста, настройте GitHub Personal Access Token"
+        }));
     }
 
     // 限制数量范围
@@ -54,16 +64,46 @@ function fetchEvents(config) {
         var response = sidefy.http.get(url, headers);
 
         if (!response || response.length === 0) {
-            throw new Error("GitHub API 返回空响应");
+            throw new Error(sidefy.i18n({
+                "zh": "GitHub API 返回空响应",
+                "en": "GitHub API returned empty response",
+                "ja": "GitHub API が空のレスポンスを返しました",
+                "ko": "GitHub API가 빈 응답을 반환했습니다",
+                "de": "GitHub API hat eine leere Antwort zurückgegeben",
+                "es": "La API de GitHub devolvió una respuesta vacía",
+                "fr": "L'API GitHub a renvoyé une réponse vide",
+                "pt": "A API do GitHub retornou uma resposta vazia",
+                "ru": "GitHub API вернул пустой ответ"
+            }));
         }
 
         var notifications = JSON.parse(response);
 
         if (!Array.isArray(notifications)) {
             if (notifications.message) {
-                throw new Error("GitHub API 错误: " + notifications.message);
+                throw new Error(sidefy.i18n({
+                    "zh": "GitHub API 错误: " + notifications.message,
+                    "en": "GitHub API error: " + notifications.message,
+                    "ja": "GitHub API エラー: " + notifications.message,
+                    "ko": "GitHub API 오류: " + notifications.message,
+                    "de": "GitHub API Fehler: " + notifications.message,
+                    "es": "Error de API de GitHub: " + notifications.message,
+                    "fr": "Erreur de l'API GitHub: " + notifications.message,
+                    "pt": "Erro da API do GitHub: " + notifications.message,
+                    "ru": "Ошибка GitHub API: " + notifications.message
+                }));
             }
-            throw new Error("GitHub API 返回数据格式错误");
+            throw new Error(sidefy.i18n({
+                "zh": "GitHub API 返回数据格式错误",
+                "en": "GitHub API returned invalid data format",
+                "ja": "GitHub API が無効なデータ形式を返しました",
+                "ko": "GitHub API가 잘못된 데이터 형식을 반환했습니다",
+                "de": "GitHub API hat ein ungültiges Datenformat zurückgegeben",
+                "es": "La API de GitHub devolvió un formato de datos no válido",
+                "fr": "L'API GitHub a renvoyé un format de données invalide",
+                "pt": "A API do GitHub retornou um formato de dados inválido",
+                "ru": "GitHub API вернул неверный формат данных"
+            }));
         }
 
         // 处理通知数据
@@ -110,7 +150,17 @@ function fetchEvents(config) {
         return events;
 
     } catch (error) {
-        throw new Error("获取 GitHub 通知失败: " + error.message);
+        throw new Error(sidefy.i18n({
+            "zh": "获取 GitHub 通知失败: " + error.message,
+            "en": "Failed to fetch GitHub notifications: " + error.message,
+            "ja": "GitHub 通知の取得に失敗しました: " + error.message,
+            "ko": "GitHub 알림을 가져오는 데 실패했습니다: " + error.message,
+            "de": "GitHub-Benachrichtigungen konnten nicht abgerufen werden: " + error.message,
+            "es": "Error al obtener notificaciones de GitHub: " + error.message,
+            "fr": "Échec de la récupération des notifications GitHub: " + error.message,
+            "pt": "Falha ao buscar notificações do GitHub: " + error.message,
+            "ru": "Не удалось получить уведомления GitHub: " + error.message
+        }));
     }
 }
 
@@ -126,17 +176,17 @@ function getNotificationTitle(notification) {
 // 获取通知类型显示文本
 function getNotificationTypeText(reason) {
     var typeMap = {
-        "mention": "提及",
-        "assign": "分配",
-        "review_requested": "审查请求",
-        "subscribed": "订阅",
-        "team_mention": "团队提及",
-        "author": "作者",
-        "manual": "手动订阅",
-        "comment": "评论",
+        "mention": sidefy.i18n({"zh": "提及", "en": "Mention", "ja": "メンション", "ko": "언급", "de": "Erwähnung", "es": "Mención", "fr": "Mention", "pt": "Menção", "ru": "Упоминание"}),
+        "assign": sidefy.i18n({"zh": "分配", "en": "Assign", "ja": "割り当て", "ko": "할당", "de": "Zuweisen", "es": "Asignar", "fr": "Assigner", "pt": "Atribuir", "ru": "Назначить"}),
+        "review_requested": sidefy.i18n({"zh": "审查请求", "en": "Review", "ja": "レビュー", "ko": "검토", "de": "Überprüfung", "es": "Revisión", "fr": "Révision", "pt": "Revisão", "ru": "Проверка"}),
+        "subscribed": sidefy.i18n({"zh": "订阅", "en": "Subscribed", "ja": "購読", "ko": "구독", "de": "Abonniert", "es": "Suscrito", "fr": "Abonné", "pt": "Inscrito", "ru": "Подписан"}),
+        "team_mention": sidefy.i18n({"zh": "团队提及", "en": "Team", "ja": "チーム", "ko": "팀", "de": "Team", "es": "Equipo", "fr": "Équipe", "pt": "Equipe", "ru": "Команда"}),
+        "author": sidefy.i18n({"zh": "作者", "en": "Author", "ja": "著者", "ko": "작성자", "de": "Autor", "es": "Autor", "fr": "Auteur", "pt": "Autor", "ru": "Автор"}),
+        "manual": sidefy.i18n({"zh": "手动订阅", "en": "Manual", "ja": "手動", "ko": "수동", "de": "Manuell", "es": "Manual", "fr": "Manuel", "pt": "Manual", "ru": "Вручную"}),
+        "comment": sidefy.i18n({"zh": "评论", "en": "Comment", "ja": "コメント", "ko": "댓글", "de": "Kommentar", "es": "Comentario", "fr": "Commentaire", "pt": "Comentário", "ru": "Комментарий"}),
         "pull_request": "PR",
         "issue": "Issue",
-        "state_change": "状态变更"
+        "state_change": sidefy.i18n({"zh": "状态变更", "en": "State", "ja": "状態", "ko": "상태", "de": "Status", "es": "Estado", "fr": "État", "pt": "Estado", "ru": "Статус"})
     };
 
     return typeMap[reason] || reason;
@@ -165,19 +215,19 @@ function getNotificationColor(reason) {
 function getNotificationNotes(notification) {
     var notes = [];
 
-    notes.push("仓库: " + notification.repository.full_name);
-    notes.push("主题: " + notification.subject.type);
+    notes.push(sidefy.i18n({"zh": "仓库", "en": "Repository", "ja": "リポジトリ", "ko": "저장소", "de": "Repository", "es": "Repositorio", "fr": "Dépôt", "pt": "Repositório", "ru": "Репозиторий"}) + ": " + notification.repository.full_name);
+    notes.push(sidefy.i18n({"zh": "主题", "en": "Subject", "ja": "件名", "ko": "주제", "de": "Betreff", "es": "Asunto", "fr": "Sujet", "pt": "Assunto", "ru": "Тема"}) + ": " + notification.subject.type);
 
     if (notification.unread) {
-        notes.push("状态: 未读");
+        notes.push(sidefy.i18n({"zh": "状态: 未读", "en": "Status: Unread", "ja": "ステータス: 未読", "ko": "상태: 읽지 않음", "de": "Status: Ungelesen", "es": "Estado: No leído", "fr": "Statut: Non lu", "pt": "Status: Não lido", "ru": "Статус: Непрочитано"}));
     } else {
-        notes.push("状态: 已读");
+        notes.push(sidefy.i18n({"zh": "状态: 已读", "en": "Status: Read", "ja": "ステータス: 既読", "ko": "상태: 읽음", "de": "Status: Gelesen", "es": "Estado: Leído", "fr": "Statut: Lu", "pt": "Status: Lido", "ru": "Статус: Прочитано"}));
     }
 
     // 添加具体的原因描述
     var reasonDesc = getReasonDescription(notification.reason);
     if (reasonDesc) {
-        notes.push("详情: " + reasonDesc);
+        notes.push(sidefy.i18n({"zh": "详情", "en": "Details", "ja": "詳細", "ko": "상세정보", "de": "Details", "es": "Detalles", "fr": "Détails", "pt": "Detalhes", "ru": "Детали"}) + ": " + reasonDesc);
     }
 
     return notes.join("\n");
@@ -186,17 +236,17 @@ function getNotificationNotes(notification) {
 // 获取通知原因的详细描述
 function getReasonDescription(reason) {
     var descriptions = {
-        "mention": "你被在评论中@提及",
-        "assign": "你被分配到此任务",
-        "review_requested": "请求你进行代码审查",
-        "subscribed": "你订阅了此项目的更新",
-        "team_mention": "你的团队被提及",
-        "author": "你是此项目的作者",
-        "manual": "你手动订阅了此通知",
-        "comment": "有新的评论",
-        "pull_request": "Pull Request 有更新",
-        "issue": "Issue 有更新",
-        "state_change": "Issue或PR状态发生变更"
+        "mention": sidefy.i18n({"zh": "你被在评论中@提及", "en": "You were @mentioned in a comment", "ja": "コメントで@メンションされました", "ko": "댓글에서 @언급되었습니다", "de": "Sie wurden in einem Kommentar @erwähnt", "es": "Fuiste @mencionado en un comentario", "fr": "Vous avez été @mentionné dans un commentaire", "pt": "Você foi @mencionado em um comentário", "ru": "Вас @упомянули в комментарии"}),
+        "assign": sidefy.i18n({"zh": "你被分配到此任务", "en": "You were assigned to this task", "ja": "このタスクに割り当てられました", "ko": "이 작업에 할당되었습니다", "de": "Sie wurden dieser Aufgabe zugewiesen", "es": "Fuiste asignado a esta tarea", "fr": "Vous avez été assigné à cette tâche", "pt": "Você foi atribuído a esta tarefa", "ru": "Вам назначена эта задача"}),
+        "review_requested": sidefy.i18n({"zh": "请求你进行代码审查", "en": "Code review requested from you", "ja": "コードレビューをリクエストされました", "ko": "코드 검토가 요청되었습니다", "de": "Code-Überprüfung von Ihnen angefordert", "es": "Se te solicitó una revisión de código", "fr": "Révision de code demandée de votre part", "pt": "Revisão de código solicitada de você", "ru": "Запрошена проверка кода от вас"}),
+        "subscribed": sidefy.i18n({"zh": "你订阅了此项目的更新", "en": "You subscribed to updates", "ja": "アップデートを購読しています", "ko": "업데이트를 구독했습니다", "de": "Sie haben Updates abonniert", "es": "Te suscribiste a las actualizaciones", "fr": "Vous vous êtes abonné aux mises à jour", "pt": "Você se inscreveu nas atualizações", "ru": "Вы подписались на обновления"}),
+        "team_mention": sidefy.i18n({"zh": "你的团队被提及", "en": "Your team was mentioned", "ja": "チームがメンションされました", "ko": "팀이 언급되었습니다", "de": "Ihr Team wurde erwähnt", "es": "Tu equipo fue mencionado", "fr": "Votre équipe a été mentionnée", "pt": "Sua equipe foi mencionada", "ru": "Ваша команда была упомянута"}),
+        "author": sidefy.i18n({"zh": "你是此项目的作者", "en": "You are the author", "ja": "あなたが作成者です", "ko": "당신이 작성자입니다", "de": "Sie sind der Autor", "es": "Eres el autor", "fr": "Vous êtes l'auteur", "pt": "Você é o autor", "ru": "Вы автор"}),
+        "manual": sidefy.i18n({"zh": "你手动订阅了此通知", "en": "Manually subscribed", "ja": "手動で購読しました", "ko": "수동으로 구독했습니다", "de": "Manuell abonniert", "es": "Suscrito manualmente", "fr": "Abonné manuellement", "pt": "Inscrito manualmente", "ru": "Подписано вручную"}),
+        "comment": sidefy.i18n({"zh": "有新的评论", "en": "New comment", "ja": "新しいコメント", "ko": "새 댓글", "de": "Neuer Kommentar", "es": "Nuevo comentario", "fr": "Nouveau commentaire", "pt": "Novo comentário", "ru": "Новый комментарий"}),
+        "pull_request": sidefy.i18n({"zh": "Pull Request 有更新", "en": "Pull Request updated", "ja": "Pull Request が更新されました", "ko": "Pull Request가 업데이트되었습니다", "de": "Pull Request aktualisiert", "es": "Pull Request actualizado", "fr": "Pull Request mis à jour", "pt": "Pull Request atualizado", "ru": "Pull Request обновлен"}),
+        "issue": sidefy.i18n({"zh": "Issue 有更新", "en": "Issue updated", "ja": "Issue が更新されました", "ko": "Issue가 업데이트되었습니다", "de": "Issue aktualisiert", "es": "Issue actualizado", "fr": "Issue mis à jour", "pt": "Issue atualizado", "ru": "Issue обновлен"}),
+        "state_change": sidefy.i18n({"zh": "Issue或PR状态发生变更", "en": "State changed", "ja": "状態が変更されました", "ko": "상태가 변경되었습니다", "de": "Status geändert", "es": "Estado cambiado", "fr": "État modifié", "pt": "Estado alterado", "ru": "Статус изменен"})
     };
 
     return descriptions[reason] || "";
