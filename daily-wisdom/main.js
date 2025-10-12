@@ -27,7 +27,17 @@ function fetchEvents(config) {
 
         // 检查AI返回结果，有问题直接抛出异常
         if (!wisdomText || wisdomText.trim() === "" || wisdomText.indexOf("Error:") === 0) {
-            throw new Error("AI调用失败或返回无效内容: " + wisdomText);
+            throw new Error(sidefy.i18n({
+                "zh": "AI调用失败或返回无效内容: " + wisdomText,
+                "en": "AI call failed or returned invalid content: " + wisdomText,
+                "ja": "AI呼び出しが失敗したか、無効な内容が返されました: " + wisdomText,
+                "ko": "AI 호출 실패 또는 유효하지 않은 내용 반환: " + wisdomText,
+                "de": "AI-Aufruf fehlgeschlagen oder ungültiger Inhalt zurückgegeben: " + wisdomText,
+                "es": "Llamada de IA falló o devolvió contenido no válido: " + wisdomText,
+                "fr": "Échec de l'appel IA ou contenu invalide retourné: " + wisdomText,
+                "pt": "Falha na chamada de IA ou conteúdo inválido retornado: " + wisdomText,
+                "ru": "Вызов ИИ не удался или вернул недопустимое содержимое: " + wisdomText
+            }));
         }
 
         // 计算到今天结束的剩余分钟数
@@ -51,7 +61,17 @@ function fetchEvents(config) {
 
         // 检查AI返回结果，有问题直接抛出异常
         if (!newWisdom || newWisdom.trim() === "" || newWisdom.indexOf("Error:") === 0) {
-            throw new Error("AI调用失败或返回无效内容: " + newWisdom);
+            throw new Error(sidefy.i18n({
+                "zh": "AI调用失败或返回无效内容: " + newWisdom,
+                "en": "AI call failed or returned invalid content: " + newWisdom,
+                "ja": "AI呼び出しが失敗したか、無効な内容が返されました: " + newWisdom,
+                "ko": "AI 호출 실패 또는 유효하지 않은 내용 반환: " + newWisdom,
+                "de": "AI-Aufruf fehlgeschlagen oder ungültiger Inhalt zurückgegeben: " + newWisdom,
+                "es": "Llamada de IA falló o devolvió contenido no válido: " + newWisdom,
+                "fr": "Échec de l'appel IA ou contenu invalide retourné: " + newWisdom,
+                "pt": "Falha na chamada de IA ou conteúdo inválido retornado: " + newWisdom,
+                "ru": "Вызов ИИ не удался или вернул недопустимое содержимое: " + newWisdom
+            }));
         }
 
         wisdomText = newWisdom;

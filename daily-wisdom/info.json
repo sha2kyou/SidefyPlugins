@@ -1,7 +1,7 @@
 {
     "name": "Daily Wisdom Quotes",
     "description": "AI-generated personalized wisdom quotes displayed as all-day events, intelligently refreshed every 3 hours. Automatically follows app language and supports multiple styles.",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.9.10",
     "tags": [
