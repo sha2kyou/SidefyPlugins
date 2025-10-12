@@ -67,7 +67,7 @@ function fetchEvents(config) {
     var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
 
     var event = {
-        title: "今日智慧语录",
+        title: wisdomText,
         startDate: sdcl.date.format(startTime.getTime() / 1000),
         endDate: sdcl.date.format(endTime.getTime() / 1000),
         color: getRandomColor(),
