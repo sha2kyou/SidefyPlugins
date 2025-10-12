@@ -11,7 +11,7 @@ function fetchEvents(config) {
     var cacheKey = "daily_wisdom_v5_" + dateKey;
 
     // 尝试从缓存获取今日语录
-    var cachedWisdom = sdcl.storage.get(cacheKey);
+    var cachedWisdom = sidefy.storage.get(cacheKey);
 
     var wisdomText = "";
 
@@ -23,7 +23,7 @@ function fetchEvents(config) {
         var prompt = buildPrompt(randomStyle, language);
 
         // 调用AI生成语录
-        wisdomText = sdcl.ai.chat(prompt);
+        wisdomText = sidefy.ai.chat(prompt);
 
         // 检查AI返回结果，有问题直接抛出异常
         if (!wisdomText || wisdomText.trim() === "" || wisdomText.indexOf("Error:") === 0) {
@@ -34,12 +34,12 @@ function fetchEvents(config) {
         var remainingMinutes = getRemainingMinutesToday();
 
         // 缓存语录
-        sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
+        sidefy.storage.set(cacheKey, wisdomText, remainingMinutes);
     }
 
     // 检查是否需要更新语录（每3小时检查一次）
     var updateKey = "wisdom_last_update_v4_" + dateKey;
-    var lastUpdate = sdcl.storage.get(updateKey);
+    var lastUpdate = sidefy.storage.get(updateKey);
     var currentTime = now.getTime();
     var threeHours = 3 * 60 * 60 * 1000; // 3小时的毫秒数
 
@@ -47,7 +47,7 @@ function fetchEvents(config) {
         // 需要更新语录
         var newStyle = getRandomStyle();
         var newPrompt = buildPrompt(newStyle, language);
-        var newWisdom = sdcl.ai.chat(newPrompt);
+        var newWisdom = sidefy.ai.chat(newPrompt);
 
         // 检查AI返回结果，有问题直接抛出异常
         if (!newWisdom || newWisdom.trim() === "" || newWisdom.indexOf("Error:") === 0) {
@@ -57,8 +57,8 @@ function fetchEvents(config) {
         wisdomText = newWisdom;
         // 更新缓存
         var remainingMinutes = getRemainingMinutesToday();
-        sdcl.storage.set(cacheKey, wisdomText, remainingMinutes);
-        sdcl.storage.set(updateKey, currentTime, remainingMinutes);
+        sidefy.storage.set(cacheKey, wisdomText, remainingMinutes);
+        sidefy.storage.set(updateKey, currentTime, remainingMinutes);
     }
 
     // 创建全天智慧语录事件
@@ -68,8 +68,8 @@ function fetchEvents(config) {
 
     var event = {
         title: wisdomText,
-        startDate: sdcl.date.format(startTime.getTime() / 1000),
-        endDate: sdcl.date.format(endTime.getTime() / 1000),
+        startDate: sidefy.date.format(startTime.getTime() / 1000),
+        endDate: sidefy.date.format(endTime.getTime() / 1000),
         color: getRandomColor(),
         notes: wisdomText,
         isAllDay: true,
@@ -85,7 +85,7 @@ function fetchEvents(config) {
 
 // 根据应用语言自动选择语言
 function getLanguageByApp() {
-    var appLang = sdcl.app.language();
+    var appLang = sidefy.app.language();
 
     if (appLang === "zh" || appLang === "zh-Hans" || appLang === "zh-Hant") {
         return "中文";

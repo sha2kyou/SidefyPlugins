@@ -9,7 +9,7 @@ function fetchEvents(config) {
     var steamId = config.steam_id;
 
     if (!steamId || steamId.trim() === "") {
-        throw new Error(sdcl.i18n({
+        throw new Error(sidefy.i18n({
             "zh": "Steam 用户名不能为空，请在插件配置中填入您的 Steam 用户名。",
             "en": "Steam username cannot be empty, please enter your Steam username in the plugin configuration.",
             "ja": "Steam ユーザー名を空にすることはできません。プラグイン設定に Steam ユーザー名を入力してください。",
@@ -27,7 +27,7 @@ function fetchEvents(config) {
     // --- 缓存逻辑 ---
     var cacheKey = "steam_wishlist_discount_v10_" + steamId;
 
-    var cachedData = sdcl.storage.get(cacheKey);
+    var cachedData = sidefy.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
     }
@@ -37,10 +37,10 @@ function fetchEvents(config) {
     try {
         // 1. 首先需要将用户名转换为Steam ID
         var steamIdUrl = "https://steamcommunity.com/id/" + steamId + "?xml=1";
-        var steamIdResponse = sdcl.http.get(steamIdUrl);
+        var steamIdResponse = sidefy.http.get(steamIdUrl);
 
         if (!steamIdResponse) {
-            throw new Error(sdcl.i18n({
+            throw new Error(sidefy.i18n({
                 "zh": "无法获取Steam用户信息，请检查您的Steam用户名是否正确。",
                 "en": "Unable to retrieve Steam user information. Please check if your Steam username is correct.",
                 "ja": "Steam ユーザー情報を取得できません。Steam ユーザー名が正しいか確認してください。",
@@ -56,7 +56,7 @@ function fetchEvents(config) {
         // 从XML响应中提取Steam ID
         var steamId64Match = steamIdResponse.match(/<steamID64>(\d+)<\/steamID64>/);
         if (!steamId64Match) {
-            throw new Error(sdcl.i18n({
+            throw new Error(sidefy.i18n({
                 "zh": "无法找到对应的Steam ID，请确认用户名正确且资料为公开。",
                 "en": "Cannot find the corresponding Steam ID. Please ensure the username is correct and the profile is public.",
                 "ja": "対応する Steam ID が見つかりません。ユーザー名が正しく、プロフィールが公開されていることを確認してください。",
@@ -72,10 +72,10 @@ function fetchEvents(config) {
 
         // 2. 使用Steam ID获取愿望单
         var wishlistUrl = "https://api.steampowered.com/IWishlistService/GetWishlist/v1?steamid=" + steamId64;
-        var wishlistResponse = sdcl.http.get(wishlistUrl);
+        var wishlistResponse = sidefy.http.get(wishlistUrl);
 
         if (!wishlistResponse) {
-            throw new Error(sdcl.i18n({
+            throw new Error(sidefy.i18n({
                 "zh": "无法获取愿望单数据，请检查您的愿望单是否设置为公开。",
                 "en": "Unable to retrieve wishlist data. Please check if your wishlist is set to public.",
                 "ja": "ウィッシュリストデータを取得できません。ウィッシュリストが公開に設定されているか確認してください。",
@@ -102,7 +102,7 @@ function fetchEvents(config) {
         if (gameItems.length === 0) {
             // 如果愿望单为空，不显示任何事件
             // 缓存空结果（30分钟）
-            sdcl.storage.set(cacheKey, events, 30);
+            sidefy.storage.set(cacheKey, events, 30);
             return events;
         }
 
@@ -119,7 +119,7 @@ function fetchEvents(config) {
             try {
                 // 获取游戏详细信息和价格
                 var gameDetailUrl = "https://store.steampowered.com/api/appdetails?appids=" + appId + "&cc=cn&l=schinese&filters=price_overview,basic";
-                var gameDetailResponse = sdcl.http.get(gameDetailUrl);
+                var gameDetailResponse = sidefy.http.get(gameDetailUrl);
 
                 if (!gameDetailResponse) {
                     continue;
@@ -177,7 +177,7 @@ function fetchEvents(config) {
                 var timestamp = eventDate.getTime() / 1000;
 
                 var discountColor = getDiscountColor(game.discountPercent);
-                var notes = sdcl.i18n({
+                var notes = sidefy.i18n({
                     "zh": "原价: " + game.originalPrice + "\n现价: " + game.finalPrice + "\n折扣: -" + game.discountPercent + "%",
                     "en": "Original Price: " + game.originalPrice + "\nCurrent Price: " + game.finalPrice + "\nDiscount: -" + game.discountPercent + "%",
                     "ja": "元の価格: " + game.originalPrice + "\n現在の価格: " + game.finalPrice + "\n割引: -" + game.discountPercent + "%",
@@ -191,8 +191,8 @@ function fetchEvents(config) {
 
                 var gameEvent = {
                     title: game.name + " (-" + game.discountPercent + "%)",
-                    startDate: sdcl.date.format(timestamp),
-                    endDate: sdcl.date.format(timestamp),
+                    startDate: sidefy.date.format(timestamp),
+                    endDate: sidefy.date.format(timestamp),
                     color: discountColor,
                     notes: notes,
                     href: game.storeUrl,
@@ -208,12 +208,12 @@ function fetchEvents(config) {
 
         // 将成功获取的事件缓存30分钟
         if (events.length > 0) {
-            sdcl.storage.set(cacheKey, events, 30);
+            sidefy.storage.set(cacheKey, events, 30);
         } else {
         }
 
     } catch (err) {
-        throw new Error(sdcl.i18n({
+        throw new Error(sidefy.i18n({
             "zh": "Steam 愿望单插件执行失败: " + err.message,
             "en": "Steam Wishlist plugin execution failed: " + err.message,
             "ja": "Steam ウィッシュリストプラグインの実行に失敗しました: " + err.message,

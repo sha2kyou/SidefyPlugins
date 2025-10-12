@@ -1,18 +1,18 @@
 {
-    "name": "每日智慧语录",
-    "description": "使用 AI 生成个性化智慧语录，每天显示一条全天日程，每3小时智能更新内容。自动跟随应用语言，支持多种风格。",
+    "name": "Daily Wisdom Quotes",
+    "description": "AI-generated personalized wisdom quotes displayed as all-day events, intelligently refreshed every 3 hours. Automatically follows app language and supports multiple styles.",
     "version": "0.0.7",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.9.10",
     "tags": [
         "AI",
-        "智慧",
-        "语录",
-        "每日",
-        "正能量",
-        "多语言"
+        "wisdom",
+        "quotes",
+        "daily",
+        "motivation",
+        "multilingual"
     ],
-    "category": "生活工具",
+    "category": "Lifestyle & Utilities",
     "config_options": {},
     "requirements": {
         "network": false,

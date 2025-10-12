@@ -17,7 +17,7 @@ function fetchEvents(config) {
     }
 
     // 3. 读取或初始化存储
-    var storage = sdcl.storage.get(CACHE_KEY);
+    var storage = sidefy.storage.get(CACHE_KEY);
     if (!storage) {
         storage = initStorage(mids, today);
     }
@@ -38,7 +38,7 @@ function fetchEvents(config) {
         storage.meta.last = now;
 
         // 保存到存储（缓存 24 小时）
-        sdcl.storage.set(CACHE_KEY, storage, 86400);
+        sidefy.storage.set(CACHE_KEY, storage, 86400);
     }
 
     // 6. 返回所有事件
@@ -170,7 +170,7 @@ function fetchEvents(config) {
 
         for (var attempt = 0; attempt < maxRetries; attempt++) {
             try {
-                response = sdcl.http.get(url, headers);
+                response = sidefy.http.get(url, headers);
                 if (response && response.length > 0) {
                     var data = JSON.parse(response);
                     if (data.code === 0) {
@@ -247,8 +247,8 @@ function fetchEvents(config) {
 
                 events.push({
                     title: v.t,
-                    startDate: sdcl.date.format(v.d),
-                    endDate: sdcl.date.format(v.d),
+                    startDate: sidefy.date.format(v.d),
+                    endDate: sidefy.date.format(v.d),
                     color: "#FB7299",
                     icon: config.icon,
                     notes: "UP主: " + v.a +

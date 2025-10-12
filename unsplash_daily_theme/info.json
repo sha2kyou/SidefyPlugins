@@ -1,24 +1,24 @@
 {
-    "name": "Unsplash 每日图片",
-    "description": "每天在早10点、中午1点、下午6点，为您展示三张不同主题的精美图片。",
-    "version": "0.1.4",
+    "name": "Unsplash Daily Photos",
+    "description": "Display three beautiful themed photos at 10 AM, 1 PM, and 6 PM every day.",
+    "version": "0.1.6",
     "author": "Sidefy Team",
-    "min_support_app_version": "2025.9.8",
+    "min_support_app_version": "2025.10.7",
     "tags": [
         "unsplash",
-        "图片",
-        "摄影",
-        "每日",
-        "主题",
-        "设计"
+        "photos",
+        "photography",
+        "daily",
+        "themes",
+        "design"
     ],
-    "category": "图片与设计",
+    "category": "Photos & Design",
     "config_options": {
         "access_key": {
             "type": "password",
             "default": "",
             "required": true,
-            "description": "您的 Unsplash API 访问密钥"
+            "description": "Your Unsplash API Access Key"
         }
     },
     "requirements": {

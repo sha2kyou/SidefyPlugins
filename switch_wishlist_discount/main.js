@@ -8,7 +8,7 @@ function fetchEvents(config) {
     var gameIds = config.game_ids;
 
     if (!gameIds || gameIds.trim() === "") {
-        throw new Error(sdcl.i18n({
+        throw new Error(sidefy.i18n({
             "zh": "游戏 ID 列表不能为空，请在插件配置中填入要监控的游戏 ID。",
             "en": "Game ID list cannot be empty. Please enter the game IDs you want to monitor in the plugin configuration.",
             "ja": "ゲーム ID リストを空にすることはできません。プラグイン設定で監視するゲーム ID を入力してください。",
@@ -36,7 +36,7 @@ function fetchEvents(config) {
 
     // --- 缓存逻辑 ---
     var cacheKey = "switch_wishlist_jp_v3_" + cleanedIds;
-    var cachedData = sdcl.storage.get(cacheKey);
+    var cachedData = sidefy.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
     }
@@ -48,10 +48,10 @@ function fetchEvents(config) {
         // 1. 查询游戏价格信息（日本区）
         var priceUrl = "https://api.ec.nintendo.com/v1/price?country=JP&ids=" +
                        cleanedIds + "&lang=ja";
-        var priceResponse = sdcl.http.get(priceUrl);
+        var priceResponse = sidefy.http.get(priceUrl);
 
         if (!priceResponse) {
-            throw new Error(sdcl.i18n({
+            throw new Error(sidefy.i18n({
                 "zh": "无法获取游戏价格信息，请检查网络连接。",
                 "en": "Unable to retrieve game price information. Please check your network connection.",
                 "ja": "ゲーム価格情報を取得できません。ネットワーク接続を確認してください。",
@@ -67,7 +67,7 @@ function fetchEvents(config) {
         var priceData = JSON.parse(priceResponse);
 
         if (!priceData.prices || priceData.prices.length === 0) {
-            throw new Error(sdcl.i18n({
+            throw new Error(sidefy.i18n({
                 "zh": "未找到游戏价格信息，请检查游戏 ID 是否正确。",
                 "en": "Game price information not found. Please check if the game IDs are correct.",
                 "ja": "ゲーム価格情報が見つかりません。ゲーム ID が正しいか確認してください。",
@@ -90,10 +90,10 @@ function fetchEvents(config) {
             // 从日本商店页面抓取游戏信息
             try {
                 var storeUrl = "https://store-jp.nintendo.com/item/software/D" + gameId;
-                var storePage = sdcl.http.get(storeUrl);
+                var storePage = sidefy.http.get(storeUrl);
 
                 if (storePage) {
-                    var gameName = sdcl.i18n({
+                    var gameName = sidefy.i18n({
                         "zh": "游戏 ID: " + gameId,
                         "en": "Game ID: " + gameId,
                         "ja": "ゲーム ID: " + gameId,
@@ -135,7 +135,7 @@ function fetchEvents(config) {
 
             // 如果都失败，使用游戏 ID 作为名称
             gameInfoMap[gameId] = {
-                name: sdcl.i18n({
+                name: sidefy.i18n({
                     "zh": "游戏 ID: " + gameId,
                     "en": "Game ID: " + gameId,
                     "ja": "ゲーム ID: " + gameId,
@@ -170,7 +170,7 @@ function fetchEvents(config) {
                 var discountPercent = Math.round((1 - discountPrice / regularPrice) * 100);
 
                 var gameInfo = gameInfoMap[gameId] || {
-                    name: sdcl.i18n({
+                    name: sidefy.i18n({
                         "zh": "游戏 ID: " + gameId,
                         "en": "Game ID: " + gameId,
                         "ja": "ゲーム ID: " + gameId,
@@ -208,7 +208,7 @@ function fetchEvents(config) {
             var timestamp = eventDate.getTime() / 1000;
 
             var discountColor = getDiscountColor(game.discountPercent);
-            var notes = sdcl.i18n({
+            var notes = sidefy.i18n({
                 "zh": "原价: " + game.regularPrice + "\n现价: " + game.discountPrice + "\n折扣: -" + game.discountPercent + "%",
                 "en": "Original Price: " + game.regularPrice + "\nCurrent Price: " + game.discountPrice + "\nDiscount: -" + game.discountPercent + "%",
                 "ja": "元の価格: " + game.regularPrice + "\n現在の価格: " + game.discountPrice + "\n割引: -" + game.discountPercent + "%",
@@ -222,7 +222,7 @@ function fetchEvents(config) {
 
             // 添加设备兼容性信息
             if (game.device) {
-                notes += "\n" + sdcl.i18n({
+                notes += "\n" + sidefy.i18n({
                     "zh": "对应本体: " + game.device,
                     "en": "Compatible Device: " + game.device,
                     "ja": "対応本体: " + game.device,
@@ -237,8 +237,8 @@ function fetchEvents(config) {
 
             var gameEvent = {
                 title: game.name + " (-" + game.discountPercent + "%)",
-                startDate: sdcl.date.format(timestamp),
-                endDate: sdcl.date.format(timestamp),
+                startDate: sidefy.date.format(timestamp),
+                endDate: sidefy.date.format(timestamp),
                 color: discountColor,
                 notes: notes,
                 href: game.url,
@@ -252,11 +252,11 @@ function fetchEvents(config) {
 
         // 将成功获取的事件缓存 2 小时
         if (events.length > 0) {
-            sdcl.storage.set(cacheKey, events, 120);
+            sidefy.storage.set(cacheKey, events, 120);
         }
 
     } catch (err) {
-        throw new Error(sdcl.i18n({
+        throw new Error(sidefy.i18n({
             "zh": "Switch 愿望单插件执行失败: " + err.message,
             "en": "Switch Wishlist plugin execution failed: " + err.message,
             "ja": "Switch ウィッシュリストプラグインの実行に失敗しました: " + err.message,

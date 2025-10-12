@@ -8,7 +8,7 @@ function fetchEvents(config) {
     var dateString = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
     var cacheKey = "pokemon_daily_v12_" + dateString;
 
-    var cachedData = sdcl.storage.get(cacheKey);
+    var cachedData = sidefy.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
     }
@@ -28,7 +28,7 @@ function fetchEvents(config) {
         // 构建URL
         var pokemonUrl = "https://pokemondb.net/pokedex/" + paddedId;
 
-        var response = sdcl.http.get(pokemonUrl);
+        var response = sidefy.http.get(pokemonUrl);
         if (!response) {
             throw new Error("获取宝可梦信息失败，请检查网络连接。");
         }
@@ -43,8 +43,8 @@ function fetchEvents(config) {
 
         events.push({
             title: pokemonData.name + " (#" + paddedId + ")",
-            startDate: sdcl.date.format(eventDate.getTime() / 1000),
-            endDate: sdcl.date.format(eventDate.getTime() / 1000),
+            startDate: sidefy.date.format(eventDate.getTime() / 1000),
+            endDate: sidefy.date.format(eventDate.getTime() / 1000),
             color: getTypeColor(pokemonData.types[0]),
             href: pokemonUrl,
             imageURL: pokemonData.imageUrl,
@@ -54,7 +54,7 @@ function fetchEvents(config) {
 
         // 将成功获取的事件缓存到当天结束
         if (events.length > 0) {
-            sdcl.storage.set(cacheKey, events, remainingMinutes);
+            sidefy.storage.set(cacheKey, events, remainingMinutes);
         }
 
     } catch (err) {
