@@ -25,7 +25,12 @@ function fetchEvents(config) {
 
 
     // --- 缓存逻辑 ---
-    var cacheKey = "steam_wishlist_discount_v10_" + steamId;
+    // 在缓存键中加入日期，确保跨天后缓存自动失效
+    var today = new Date();
+    var dateKey = today.getFullYear() + "" +
+                  String(today.getMonth() + 1).padStart(2, '0') +
+                  String(today.getDate()).padStart(2, '0');
+    var cacheKey = "steam_wishlist_discount_v11_" + steamId + "_" + dateKey;
 
     var cachedData = sidefy.storage.get(cacheKey);
     if (cachedData) {

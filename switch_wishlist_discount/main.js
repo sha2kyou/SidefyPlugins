@@ -35,7 +35,12 @@ function fetchEvents(config) {
     var cleanedIds = cleanedIdsArray.join(',');
 
     // --- 缓存逻辑 ---
-    var cacheKey = "switch_wishlist_jp_v3_" + cleanedIds;
+    // 在缓存键中加入日期，确保跨天后缓存自动失效
+    var today = new Date();
+    var dateKey = today.getFullYear() + "" +
+                  String(today.getMonth() + 1).padStart(2, '0') +
+                  String(today.getDate()).padStart(2, '0');
+    var cacheKey = "switch_wishlist_jp_v4_" + cleanedIds + "_" + dateKey;
     var cachedData = sidefy.storage.get(cacheKey);
     if (cachedData) {
         return cachedData;
