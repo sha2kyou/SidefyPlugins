@@ -6,6 +6,7 @@ function fetchEvents(config) {
     var username = config.username;
     var token = config.token || "";
     var limit = parseInt(config.limit) || 10;
+    var filterSelf = config.filterSelf === "true" || config.filterSelf === true;
 
     if (!username) {
         throw new Error(sidefy.i18n({
@@ -98,6 +99,11 @@ function fetchEvents(config) {
 
         // 处理每个事件
         data.forEach(function (event) {
+            // 如果启用了过滤自己的事件，且当前事件是用户自己的，则跳过
+            if (filterSelf && event.actor && event.actor.login === username) {
+                return; // 跳过此事件
+            }
+
             var eventTime = new Date(event.created_at);
             var title = generateEventTitle(event);
             var color = getEventColor(event.type);
@@ -145,6 +151,10 @@ function generateEventTitle(event) {
     switch (event.type) {
         case "PushEvent":
             var commitCount = event.payload.commits ? event.payload.commits.length : 0;
+            // 如果没有提交(如force push、删除分支等操作)，显示不同的文案
+            if (commitCount === 0) {
+                return actor + " " + sidefy.i18n({"zh": "推送到", "en": "pushed to", "ja": "プッシュ →", "ko": "푸시 →", "de": "hat gepusht nach", "es": "empujó a", "fr": "a poussé vers", "pt": "empurrou para", "ru": "отправил в"}) + " " + repo;
+            }
             return actor + " " + sidefy.i18n({"zh": "推送了", "en": "pushed", "ja": "プッシュしました", "ko": "푸시했습니다", "de": "hat gepusht", "es": "empujó", "fr": "a poussé", "pt": "empurrou", "ru": "отправил"}) + " " + commitCount + " " + sidefy.i18n({"zh": "个提交到", "en": "commits to", "ja": "コミット →", "ko": "커밋 →", "de": "Commits nach", "es": "commits a", "fr": "commits vers", "pt": "commits para", "ru": "коммитов в"}) + " " + repo;
 
         case "CreateEvent":

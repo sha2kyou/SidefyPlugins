@@ -176,17 +176,17 @@ function getNotificationTitle(notification) {
 // 获取通知类型显示文本
 function getNotificationTypeText(reason) {
     var typeMap = {
-        "mention": sidefy.i18n({"zh": "提及", "en": "Mention", "ja": "メンション", "ko": "언급", "de": "Erwähnung", "es": "Mención", "fr": "Mention", "pt": "Menção", "ru": "Упоминание"}),
-        "assign": sidefy.i18n({"zh": "分配", "en": "Assign", "ja": "割り当て", "ko": "할당", "de": "Zuweisen", "es": "Asignar", "fr": "Assigner", "pt": "Atribuir", "ru": "Назначить"}),
-        "review_requested": sidefy.i18n({"zh": "审查请求", "en": "Review", "ja": "レビュー", "ko": "검토", "de": "Überprüfung", "es": "Revisión", "fr": "Révision", "pt": "Revisão", "ru": "Проверка"}),
-        "subscribed": sidefy.i18n({"zh": "订阅", "en": "Subscribed", "ja": "購読", "ko": "구독", "de": "Abonniert", "es": "Suscrito", "fr": "Abonné", "pt": "Inscrito", "ru": "Подписан"}),
-        "team_mention": sidefy.i18n({"zh": "团队提及", "en": "Team", "ja": "チーム", "ko": "팀", "de": "Team", "es": "Equipo", "fr": "Équipe", "pt": "Equipe", "ru": "Команда"}),
-        "author": sidefy.i18n({"zh": "作者", "en": "Author", "ja": "著者", "ko": "작성자", "de": "Autor", "es": "Autor", "fr": "Auteur", "pt": "Autor", "ru": "Автор"}),
-        "manual": sidefy.i18n({"zh": "手动订阅", "en": "Manual", "ja": "手動", "ko": "수동", "de": "Manuell", "es": "Manual", "fr": "Manuel", "pt": "Manual", "ru": "Вручную"}),
-        "comment": sidefy.i18n({"zh": "评论", "en": "Comment", "ja": "コメント", "ko": "댓글", "de": "Kommentar", "es": "Comentario", "fr": "Commentaire", "pt": "Comentário", "ru": "Комментарий"}),
-        "pull_request": "PR",
-        "issue": "Issue",
-        "state_change": sidefy.i18n({"zh": "状态变更", "en": "State", "ja": "状態", "ko": "상태", "de": "Status", "es": "Estado", "fr": "État", "pt": "Estado", "ru": "Статус"})
+        "mention": "@mention",
+        "assign": "assign",
+        "review_requested": "review",
+        "subscribed": "subscribed",
+        "team_mention": "team",
+        "author": "author",
+        "manual": "manual",
+        "comment": "comment",
+        "state_change": "state",
+        "security_alert": "security",
+        "ci_activity": "ci"
     };
 
     return typeMap[reason] || reason;
@@ -203,9 +203,9 @@ function getNotificationColor(reason) {
         "author": "#DDA0DD",           // 紫色 - 作者
         "manual": "#98D8C8",           // 浅绿 - 手动订阅
         "comment": "#FFB347",          // 橙色 - 评论
-        "pull_request": "#87CEEB",     // 天蓝 - PR
-        "issue": "#F7DC6F",             // 浅黄 - Issue
-        "state_change": "#FF8C94"        // 粉红色 - 状态变更
+        "state_change": "#FF8C94",     // 粉红色 - 状态变更
+        "security_alert": "#DC3545",   // 深红色 - 安全警报
+        "ci_activity": "#6C757D"       // 灰色 - CI活动
     };
 
     return colorMap[reason] || "#95A5A6";
@@ -244,9 +244,9 @@ function getReasonDescription(reason) {
         "author": sidefy.i18n({"zh": "你是此项目的作者", "en": "You are the author", "ja": "あなたが作成者です", "ko": "당신이 작성자입니다", "de": "Sie sind der Autor", "es": "Eres el autor", "fr": "Vous êtes l'auteur", "pt": "Você é o autor", "ru": "Вы автор"}),
         "manual": sidefy.i18n({"zh": "你手动订阅了此通知", "en": "Manually subscribed", "ja": "手動で購読しました", "ko": "수동으로 구독했습니다", "de": "Manuell abonniert", "es": "Suscrito manualmente", "fr": "Abonné manuellement", "pt": "Inscrito manualmente", "ru": "Подписано вручную"}),
         "comment": sidefy.i18n({"zh": "有新的评论", "en": "New comment", "ja": "新しいコメント", "ko": "새 댓글", "de": "Neuer Kommentar", "es": "Nuevo comentario", "fr": "Nouveau commentaire", "pt": "Novo comentário", "ru": "Новый комментарий"}),
-        "pull_request": sidefy.i18n({"zh": "Pull Request 有更新", "en": "Pull Request updated", "ja": "Pull Request が更新されました", "ko": "Pull Request가 업데이트되었습니다", "de": "Pull Request aktualisiert", "es": "Pull Request actualizado", "fr": "Pull Request mis à jour", "pt": "Pull Request atualizado", "ru": "Pull Request обновлен"}),
-        "issue": sidefy.i18n({"zh": "Issue 有更新", "en": "Issue updated", "ja": "Issue が更新されました", "ko": "Issue가 업데이트되었습니다", "de": "Issue aktualisiert", "es": "Issue actualizado", "fr": "Issue mis à jour", "pt": "Issue atualizado", "ru": "Issue обновлен"}),
-        "state_change": sidefy.i18n({"zh": "Issue或PR状态发生变更", "en": "State changed", "ja": "状態が変更されました", "ko": "상태가 변경되었습니다", "de": "Status geändert", "es": "Estado cambiado", "fr": "État modifié", "pt": "Estado alterado", "ru": "Статус изменен"})
+        "state_change": sidefy.i18n({"zh": "Issue或PR状态发生变更", "en": "State changed", "ja": "状態が変更されました", "ko": "상태가 변경되었습니다", "de": "Status geändert", "es": "Estado cambiado", "fr": "État modifié", "pt": "Estado alterado", "ru": "Статус изменен"}),
+        "security_alert": sidefy.i18n({"zh": "发现安全漏洞", "en": "Security vulnerability found", "ja": "セキュリティの脆弱性が見つかりました", "ko": "보안 취약점이 발견되었습니다", "de": "Sicherheitslücke gefunden", "es": "Vulnerabilidad de seguridad encontrada", "fr": "Vulnérabilité de sécurité trouvée", "pt": "Vulnerabilidade de segurança encontrada", "ru": "Обнаружена уязвимость безопасности"}),
+        "ci_activity": sidefy.i18n({"zh": "CI/CD流水线有活动", "en": "CI/CD pipeline activity", "ja": "CI/CDパイプラインのアクティビティ", "ko": "CI/CD 파이프라인 활동", "de": "CI/CD-Pipeline-Aktivität", "es": "Actividad de pipeline CI/CD", "fr": "Activité de pipeline CI/CD", "pt": "Atividade de pipeline CI/CD", "ru": "Активность CI/CD конвейера"})
     };
 
     return descriptions[reason] || "";
