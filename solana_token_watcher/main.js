@@ -59,7 +59,7 @@ function fetchEvents(config) {
 
                         if (shouldPush) {
                             var updateTime = new Date(data.lastUpdatedAt);
-                            var endTime = new Date(updateTime.getTime() + 3600000); // 1小时后
+                            var endTime = new Date(data.lastUpdatedAt);
 
                             var priceChange = data.priceChange24h || 0;
                             var color = "#666666";
