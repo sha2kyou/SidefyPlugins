@@ -1,52 +1,52 @@
-## Steam 愿望单打折监控插件
+## Steam Wishlist Discount Monitor Plugin
 
 <img width="489" height="255" alt="1Capture_2025-10-03_21 59 33" src="https://github.com/user-attachments/assets/756f4b89-b847-41b3-9a34-1310266beccc" />
 
-每30分钟检查一次您的 Steam 愿望单中游戏的打折信息，当有游戏打折时在日历中提醒您。
+Automatically checks your Steam wishlist for game discounts every 30 minutes and reminds you in the calendar when games are on sale.
 
-### 功能特性
+### Features
 
-- **自动监听**：每30分钟自动检查愿望单中的游戏打折信息
-- **实时价格**：显示原价、现价和折扣百分比
-- **实时监控**：实时显示当前打折状态
-- **颜色编码**：根据折扣力度使用不同颜色（深红色75%+，橙色50%+，黄色25%+，蓝色小折扣）
-- **日历集成**：直接在日历中显示打折游戏
+- **Automatic Monitoring**: Automatically checks wishlist game discount information every 30 minutes
+- **Real-time Pricing**: Shows original price, current price, and discount percentage
+- **Live Tracking**: Displays current discount status in real-time
+- **Color Coding**: Uses different colors based on discount intensity (dark red 75%+, orange 50%+, yellow 25%+, blue for small discounts)
+- **Calendar Integration**: Directly displays discounted games in your calendar
 
-### 配置参数
+### Configuration
 
-| 参数名 | 类型 | 说明 |
-|--------|------|------|
-| `steam_id` | text | **必需**，您的 Steam 用户名（如：maozhijie） |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `steam_id` | text | **Required**, Your Steam username (e.g., maozhijie) |
 
-### 如何获取和配置 Steam 用户名
+### How to Get and Configure Steam Username
 
-1. **获取用户名**
-   - 登录 Steam 并进入个人资料页面
-   - 查看 URL 中的用户名：`https://steamcommunity.com/id/您的用户名`
+1. **Get Username**
+   - Log in to Steam and go to your profile page
+   - Check the username in the URL: `https://steamcommunity.com/id/your-username`
 
-2. **设置愿望单为公开**
-   - 进入个人资料 → 编辑个人资料 → 隐私设置
-   - 将"愿望单"设置为"公开"
+2. **Set Wishlist to Public**
+   - Go to Profile → Edit Profile → Privacy Settings
+   - Set "Wishlist" to "Public"
 
-3. **填入配置**
-   - 将用户名填入插件的 `steam_id` 配置项中
+3. **Fill in Configuration**
+   - Enter the username in the plugin's `steam_id` configuration field
 
-### 显示格式
+### Display Format
 
 ```
-游戏名称 (-折扣百分比%)
+Game Name (-Discount Percentage%)
 
-原价: ¥ 298.00
-现价: ¥ 104.30
-折扣: -65%
+Original Price: ¥ 298.00
+Current Price: ¥ 104.30
+Discount: -65%
 ```
 
-### 更新日志
+### Changelog
 
 #### v0.0.1
 
-- 初始版本发布
-- 实现每30分钟自动检查愿望单打折功能
-- 支持用户名格式的Steam ID
-- 显示完整折扣时间信息
-- 根据折扣力度的颜色编码系统
+- Initial release
+- Implemented automatic 30-minute wishlist discount checking
+- Support for username format Steam ID
+- Display complete discount time information
+- Color coding system based on discount intensity

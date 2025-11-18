@@ -1,48 +1,48 @@
-# AppStore 折扣监控插件
+# AppStore Discount Monitor Plugin
 
-## 描述
+## Description
 
-监控 App Store 应用价格,当价格低于你配置的原价时在日历中提醒你。非常适合追踪你想要以更低价格购买的应用。
+Monitor App Store app prices and get calendar notifications when prices drop below your configured reference price. Perfect for tracking apps you want to purchase at a lower price.
 
-## 功能特性
+## Features
 
-- 监控不同区域的多个应用
-- 自定义原价,实现精准折扣追踪
-- 折扣颜色编码(蓝色小折扣、黄色中等、橙色大折扣、红色超大折扣)
-- 价格下降时创建日历事件
-- 多区域支持(美国、中国、日本、英国等)
-- 智能缓存减少 API 调用(每天刷新)
-- 完整的国际化支持
+- Monitor multiple apps across different regions
+- Custom reference prices for precise discount tracking
+- Color-coded discounts (blue for small, yellow for medium, orange for large, red for huge)
+- Creates calendar events when prices drop
+- Multi-region support (US, China, Japan, UK, etc.)
+- Smart caching reduces API calls (refreshes daily)
+- Full internationalization support
 
-## 配置说明
+## Configuration
 
-### 必填参数
+### Required Parameter
 
-**app_data**: 应用监控数据
+**app_data**: App monitoring data
 
-- 格式: `应用ID_区域_原价`
-- 示例: `12345_us_68.00,2736473_cn_38.00,9876543_jp_500`
-- 多个应用用逗号分隔
-- 每个条目必须包含:
-  - **应用ID**: App Store 应用的 ID
-  - **区域**: 两位字母国家代码 (us, cn, jp, uk等)
-  - **原价**: 你知道的原价/常规价格(仅数字,不要货币符号)
+- Format: `AppID_Region_ReferencePrice`
+- Example: `12345_us_68.00,2736473_cn_38.00,9876543_jp_500`
+- Multiple apps separated by commas
+- Each entry must include:
+  - **AppID**: The App Store app ID
+  - **Region**: Two-letter country code (us, cn, jp, uk, etc.)
+  - **ReferencePrice**: Known regular price/reference price (numbers only, no currency symbols)
 
-## 如何查找应用 ID
+## How to Find App ID
 
-1. 打开 App Store 找到你要监控的应用
-2. 复制应用的 URL(例如: `https://apps.apple.com/cn/app/example-app/id1234567890`)
-3. `id` 后面的数字就是应用 ID(例如: `1234567890`)
+1. Open the App Store and find the app you want to monitor
+2. Copy the app's URL (e.g., `https://apps.apple.com/us/app/example-app/id1234567890`)
+3. The numbers after `id` are the app ID (e.g., `1234567890`)
 
-## 如何确定原价
+## How to Determine Reference Price
 
-由于 iTunes API 不提供折扣信息,你需要手动配置原价:
+Since the iTunes API doesn't provide discount information, you need to manually configure the reference price:
 
-1. 查看应用在非促销期间的常规价格
-2. 或者使用你认为值得购买的"目标价格"
-3. 当当前价格低于这个值时,插件会通知你
+1. Check the app's regular price during non-promotional periods
+2. Or use your "target price" that you consider worth buying
+3. When the current price drops below this value, the plugin will notify you
 
-## 配置示例
+## Configuration Example
 
 ```json
 {
@@ -50,33 +50,33 @@
 }
 ```
 
-这将监控:
-- 应用 `1234567890` 在美国区,原价 $9.99
-- 应用 `9876543210` 在中国区,原价 ¥68.00
-- 应用 `5555555555` 在日本区,原价 ¥1200
+This will monitor:
+- App `1234567890` in US region, reference price $9.99
+- App `9876543210` in China region, reference price ¥68.00
+- App `5555555555` in Japan region, reference price ¥1200
 
-## 工作原理
+## How It Works
 
-1. 插件每30分钟检查一次配置的应用价格
-2. 将当前价格与你配置的原价比较
-3. 如果 当前价格 < 原价: 创建带折扣百分比的日历事件
-4. 事件包含应用截图(随机选择)、价格详情和 App Store 直达链接
-5. 缓存每天过期以确保数据新鲜
+1. The plugin checks configured app prices every 30 minutes
+2. Compares current price with your configured reference price
+3. If current price < reference price: Creates a calendar event with discount percentage
+4. Events include app screenshots (randomly selected), price details, and direct App Store links
+5. Cache expires daily to ensure fresh data
 
-## 折扣颜色说明
+## Discount Color Coding
 
-- 蓝色 (0-24%): 小折扣
-- 黄色 (25-49%): 中等折扣
-- 橙色 (50-74%): 大折扣
-- 红色 (75%+): 超大折扣
+- Blue (0-24%): Small discount
+- Yellow (25-49%): Medium discount
+- Orange (50-74%): Large discount
+- Red (75%+): Huge discount
 
-## 注意事项
+## Important Notes
 
-由于 App Store 的 API 限制,我们无法自动获取应用的"官方原价"或"历史最高价"。iTunes API 只提供当前价格,不会告诉我们应用是否正在打折。
+Due to App Store API limitations, we cannot automatically retrieve an app's "official original price" or "historical highest price." The iTunes API only provides the current price and doesn't tell us if an app is on sale.
 
-因此,你需要:
-1. 在应用未打折时记录其常规价格
-2. 或者根据自己的购买意愿设定一个"心理价位"
-3. 定期检查和更新配置中的原价(如果应用永久降价了)
+Therefore, you need to:
+1. Record the app's regular price when it's not on discount
+2. Or set a "mental price point" based on your willingness to buy
+3. Periodically check and update reference prices in your configuration (if apps get permanent price cuts)
 
-这种方式虽然需要一些手动操作,但提供了最可靠和准确的折扣追踪。
+While this approach requires some manual setup, it provides the most reliable and accurate discount tracking.

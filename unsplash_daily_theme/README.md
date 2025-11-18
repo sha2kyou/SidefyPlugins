@@ -1,46 +1,46 @@
-## Unsplash 每日图片插件
+## Unsplash Daily Photo Plugin
 
-每天在三个固定时间点，为您带来一张精美的、不同主题的摄影作品，点缀您的日历视图。
+Brings you three beautiful, themed photography works at three fixed times every day to enhance your calendar view.
 
-### 功能特性
+### Features
 
-- **每日更新**：每天自动更新三张全新的图片。
-- **固定排布**：图片在当天内固定不变，分别显示在上午10点、中午1点、下午6点。
-- **主题多样**：每天会从一系列主题（如自然、城市、科技、动物等）中挑选三个，确保内容丰富不重复。
-- **高清壁纸**：点击事件可直接跳转到 Unsplash 页面，下载高清原图。
+- **Daily Updates**: Automatically updates with three brand new images every day.
+- **Fixed Schedule**: Images remain fixed throughout the day, displaying at 10 AM, 1 PM, and 6 PM respectively.
+- **Diverse Themes**: Selects three different themes daily (such as nature, city, technology, animals, etc.) to ensure rich and varied content.
+- **High-Resolution Wallpapers**: Click events to jump directly to Unsplash pages for downloading high-resolution original images.
 
-### 配置参数
+### Configuration
 
-| 参数名       | 类型     | 说明                               |
-|--------------|----------|------------------------------------|
-| `access_key` | password | **必需**，您的 Unsplash API 访问密钥。 |
+| Parameter     | Type     | Description                                |
+|---------------|----------|--------------------------------------------|
+| `access_key`  | password | **Required**, Your Unsplash API access key. |
 
-### 如何获取 Unsplash API 访问密钥 (Access Key)
+### How to Get Unsplash API Access Key
 
-1.  **注册/登录 Unsplash**
-    访问 [unsplash.com](https://unsplash.com/) 并注册一个免费账户。
+1.  **Register/Login to Unsplash**
+    Visit [unsplash.com](https://unsplash.com/) and register for a free account.
 
-2.  **访问开发者页面**
-    登录后，访问 [unsplash.com/developers](https://unsplash.com/developers)。
+2.  **Visit Developer Page**
+    After logging in, visit [unsplash.com/developers](https://unsplash.com/developers).
 
-3.  **创建新应用**
-    - 点击 “Your apps”。
-    - 点击 “New Application”。
-    - 接受所有 API 使用条款。
-    - 填写应用名称（任意，如 `SideCalendarPlugin`）和描述。
-    - 点击 “Create application”。
+3.  **Create New Application**
+    - Click "Your apps".
+    - Click "New Application".
+    - Accept all API terms of use.
+    - Fill in application name (any name, such as `SideCalendarPlugin`) and description.
+    - Click "Create application".
 
-4.  **获取密钥**
-    - 在您的应用页面，向下滚动到 “Keys” 部分。
-    - 复制 “Access Key” 字段下的长字符串。
+4.  **Get Key**
+    - On your application page, scroll down to the "Keys" section.
+    - Copy the long string under the "Access Key" field.
 
-5.  **粘贴密钥**
-    将复制的 Access Key 粘贴到此插件的 `access_key` 配置项中即可。
+5.  **Paste Key**
+    Paste the copied Access Key into the `access_key` configuration field of this plugin.
 
-### 更新日志
+### Changelog
 
 #### v0.1.0
 
-- 初始版本发布
-- 实现每日三张、主题不同、时间固定的图片展示功能
-- 24小时缓存机制
+- Initial release
+- Implemented daily display of three images with different themes at fixed times
+- 24-hour caching mechanism

@@ -1,105 +1,105 @@
-## Switch 愿望单打折监控插件 (日本区)
+## Nintendo Switch Wishlist Discount Monitor Plugin (Japan Region)
 
 <img width="486" height="370" alt="1Capture_2025-10-03_22 14 53" src="https://github.com/user-attachments/assets/a2b6c7a0-b140-4044-a19c-33fb75ddd807" />
 
-监控您的 Nintendo Switch 愿望单游戏打折信息(仅支持日本 eShop)，当有游戏打折时在日历中提醒您。
+Monitor your Nintendo Switch wishlist games for discount information (Japan eShop only), and get calendar notifications when games are on sale.
 
-### 功能特性
+### Features
 
-- **愿望单监控**：监控指定的游戏 ID 列表，当有游戏打折时自动提醒
-- **实时价格**：显示原价、现价和折扣百分比（日元）
-- **游戏信息**：自动获取游戏名称和封面图
-- **颜色编码**：根据折扣力度使用不同颜色（深红色75%+，橙色50%+，黄色25%+，蓝色小折扣）
-- **日历集成**：直接在日历中显示打折游戏，点击跳转到日本 eShop 购买
-- **智能清理**：自动处理游戏 ID 格式（移除字母前缀等）
+- **Wishlist Monitoring**: Monitor specified game ID lists and automatically alert when games are discounted
+- **Real-time Pricing**: Display original price, current price, and discount percentage (Japanese Yen)
+- **Game Information**: Automatically fetch game names and cover images
+- **Color Coding**: Use different colors based on discount intensity (dark red 75%+, orange 50%+, yellow 25%+, blue for small discounts)
+- **Calendar Integration**: Display discounted games directly in calendar, click to jump to Japanese eShop for purchase
+- **Smart Cleanup**: Automatically handle game ID format (remove letter prefixes, etc.)
 
-### 配置参数
+### Configuration
 
-| 参数名 | 类型 | 说明 |
-|--------|------|------|
-| `game_ids` | text | **必需**，要监控的游戏 ID (NSUID) 列表，多个 ID 用逗号分隔，**最多支持10个游戏** |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `game_ids` | text | **Required**, List of game IDs (NSUID) to monitor, separated by commas, **maximum 10 games supported** |
 
-**配置示例**：
+**Configuration Example**:
 ```
 70010000063514,D70010000027619,70010000048494
 ```
 
-**注意事项**：
-- 如果填入超过10个游戏ID，插件将只监控前10个
-- 游戏名称、封面图和设备兼容性信息会自动从日本商店抓取
+**Important Notes**:
+- If you enter more than 10 game IDs, the plugin will only monitor the first 10
+- Game names, cover images, and device compatibility information are automatically fetched from the Japanese store
 
-### 如何获取游戏 ID (NSUID)
+### How to Get Game ID (NSUID)
 
-#### 方法 1: 从日本 eShop 网站获取
+#### Method 1: Get from Japanese eShop Website
 
-1. 访问日本任天堂 eShop：`https://ec.nintendo.com/JP/ja/`
-2. 搜索你想监控的游戏
-3. 进入游戏详情页，查看 URL
-4. URL 中 `/titles/` 后面的数字就是游戏 ID
+1. Visit Nintendo Japan eShop: `https://ec.nintendo.com/JP/ja/`
+2. Search for the game you want to monitor
+3. Go to the game details page and check the URL
+4. The numbers after `/titles/` in the URL are the game ID
 
-**示例**：
+**Example**:
 ```
 URL: https://store-jp.nintendo.com/item/software/D70010000095202
-游戏 ID (NSUID): D70010000063514
+Game ID (NSUID): D70010000063514
 ```
 
-### 游戏 ID 格式说明
+### Game ID Format Guide
 
-- ✅ **正确格式**：14 位纯数字，如 `70010000063514`
-- ✅ **自动清理**：插件会自动移除字母前缀，如 `D70010000063514` → `70010000063514`
-- ⚠️ **所有 Switch 游戏 ID 都以 `70010000` 开头**
+- ✅ **Correct Format**: 14-digit pure numbers, like `70010000063514`
+- ✅ **Auto Cleanup**: Plugin automatically removes letter prefixes, like `D70010000063514` → `70010000063514`
+- ⚠️ **All Switch game IDs start with `70010000`**
 
-### 显示格式
+### Display Format
 
 ```
-游戏名称 (-折扣百分比%)
+Game Name (-Discount Percentage%)
 
-原价: ¥7,678
-现价: ¥4,980
-折扣: -35%
-对应本体: Switch/Switch 2
+Original Price: ¥7,678
+Current Price: ¥4,980
+Discount: -35%
+Compatible: Switch/Switch 2
 ```
 
-**设备兼容性显示**：
-- `Switch` - 仅支持 Nintendo Switch
-- `Switch 2` - 仅支持 Nintendo Switch 2
-- `Switch/Switch 2` - 两个设备都支持
+**Device Compatibility Display**:
+- `Switch` - Supports Nintendo Switch only
+- `Switch 2` - Supports Nintendo Switch 2 only
+- `Switch/Switch 2` - Supports both devices
 
-### 技术说明
+### Technical Specifications
 
-- **支持地区**：仅日本 eShop (JP)
-- **监控数量**：最多10个游戏
-- **缓存时间**：2 小时（减少 API 请求）
-- **数据来源**：
-  - 价格信息：Nintendo 日本官方价格 API
-  - 游戏信息：日本商店页面（og:title, og:image）
-  - 设备兼容性：商店页面 JSON 配置
-- **货币**：日元 (JPY)
+- **Supported Region**: Japan eShop (JP) only
+- **Monitoring Limit**: Maximum 10 games
+- **Cache Duration**: 2 hours (reduces API requests)
+- **Data Sources**:
+  - Price Information: Nintendo Japan official price API
+  - Game Information: Japanese store page (og:title, og:image)
+  - Device Compatibility: Store page JSON configuration
+- **Currency**: Japanese Yen (JPY)
 
-### 常见问题
+### FAQ
 
-**Q: 为什么没有显示游戏名称和封面图？**
-A: 部分游戏可能在搜索 API 中查询不到详细信息，会显示"游戏 ID: xxxxx"作为标题，但不影响价格监控功能。
+**Q: Why aren't game names and cover images displayed?**
+A: Some games might not have detailed information available in the search API, showing "Game ID: xxxxx" as the title, but this doesn't affect price monitoring functionality.
 
-**Q: 游戏 ID 填错了会怎样？**
-A: 插件会自动跳过无效的游戏 ID，不会影响其他游戏的监控。
+**Q: What happens if I enter the wrong game ID?**
+A: The plugin automatically skips invalid game IDs without affecting other game monitoring.
 
-**Q: 可以监控多少个游戏？**
-A: 最多支持10个游戏。如果填入超过10个ID，插件将只监控前10个。
+**Q: How many games can I monitor?**
+A: Maximum 10 games supported. If you enter more than 10 IDs, the plugin will only monitor the first 10.
 
-**Q: 支持其他地区吗？**
-A: 当前版本仅支持日本区。
+**Q: Are other regions supported?**
+A: Current version only supports the Japan region.
 
-**Q: 为什么我的 ID 是 D70010000xxxxx 格式？**
-A: 某些第三方工具可能添加了字母前缀，插件会自动清理，直接填入即可。
+**Q: Why is my ID in D70010000xxxxx format?**
+A: Some third-party tools might add letter prefixes. The plugin automatically cleans them up, so you can enter them directly.
 
-### 更新日志
+### Changelog
 
 #### v0.0.1
 
-- 初始版本发布
-- 支持日本区愿望单游戏打折监控
-- 自动获取游戏名称和封面图
-- 显示完整折扣信息（原价/现价/折扣）
-- 根据折扣力度的颜色编码系统
-- 智能清理游戏 ID 格式
+- Initial release
+- Support for Japan region wishlist game discount monitoring
+- Automatic game name and cover image fetching
+- Display complete discount information (original/current price/discount)
+- Color coding system based on discount intensity
+- Smart game ID format cleanup
