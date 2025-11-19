@@ -1,7 +1,7 @@
 {
     "name": "GitHub Notifications",
     "description": "Fetch GitHub notifications and subscriptions, including @mentions, issue assignments, PR review requests, etc. Supports filtering different types of notifications and displaying them in the calendar.",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.10.7",
     "tags": [
@@ -38,7 +38,7 @@
         "notificationTypes": {
             "type": "string",
             "default": "",
-            "description": "Notification type filter, comma-separated (blank means show all): mention,assign,review_requested,subscribed,team_mention,author,manual"
+            "description": "Notification type filter, comma-separated (blank means show all): mention,assign,review_requested,subscribed,author,manual,security_alert"
         }
     },
     "requirements": {
@@ -46,5 +46,6 @@
         "storage": true
     },
     "discontinued": true,
-    "discontinued_reason": "Due to inherent high latency issues with GitHub's official API, notification and event data updates are not timely, often delayed by hours or longer. This prevents the plugin from providing real-time accurate information, severely impacting user experience. Additionally, GitHub's API call limits are strict, and frequent requests may trigger rate limiting. Given these API-level technical limitations, we have decided to discontinue maintenance of this plugin."
+    "discontinued_reason": "Due to inherent high latency issues with GitHub's official API, notification and event data updates are not timely, often delayed by hours or longer. This prevents the plugin from providing real-time accurate information, severely impacting user experience. Additionally, GitHub's API call limits are strict, and frequent requests may trigger rate limiting. Given these API-level technical limitations, we have decided to discontinue maintenance of this plugin.",
+    "breaking_changes": ["0.2.0"]
 }
