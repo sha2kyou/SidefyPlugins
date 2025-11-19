@@ -1,7 +1,7 @@
 {
-    "name": "Unsplash Daily Photos",
-    "description": "Display three beautiful themed photos at 10 AM, 1 PM, and 6 PM every day.",
-    "version": "0.1.6",
+    "name": "Unsplash Daily Photo",
+    "description": "Display one beautiful popular photo from Unsplash homepage as an all-day event.",
+    "version": "0.2.0",
     "author": "Sidefy Team",
     "min_support_app_version": "2025.10.7",
     "tags": [
@@ -9,7 +9,7 @@
         "photos",
         "photography",
         "daily",
-        "themes",
+        "popular",
         "design"
     ],
     "category": "Photos & Design",
@@ -24,5 +24,6 @@
     "requirements": {
         "network": true,
         "storage": true
-    }
+    },
+    "breaking_changes": ["0.2.0"]
 }

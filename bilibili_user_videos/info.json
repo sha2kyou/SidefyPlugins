@@ -2,7 +2,7 @@
     "name": "Bilibili 用户视频",
     "description": "追踪指定B站UP主的当日视频投稿，支持多UP主轮询，智能限流防风控",
     "version": "0.2.2",
-    "author": "sha2kyou",
+    "author": "Sidefy Team",
     "min_support_app_version": "2025.9.0",
     "tags": [
         "bilibili",

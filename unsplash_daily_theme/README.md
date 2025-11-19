@@ -1,13 +1,13 @@
 ## Unsplash Daily Photo Plugin
 
-Brings you three beautiful, themed photography works at three fixed times every day to enhance your calendar view.
+Brings you one beautiful, popular photo from Unsplash homepage every day, displayed as an all-day event to enhance your calendar view.
 
 ### Features
 
-- **Daily Updates**: Automatically updates with three brand new images every day.
-- **Fixed Schedule**: Images remain fixed throughout the day, displaying at 10 AM, 1 PM, and 6 PM respectively.
-- **Diverse Themes**: Selects three different themes daily (such as nature, city, technology, animals, etc.) to ensure rich and varied content.
-- **High-Resolution Wallpapers**: Click events to jump directly to Unsplash pages for downloading high-resolution original images.
+- **Daily Updates**: Automatically updates with one brand new popular photo every day.
+- **All-Day Event**: Photo is displayed at 0:00 as an all-day event for better visibility.
+- **Popular Selection**: Fetches popular photos from Unsplash to showcase high-quality, trending images.
+- **High-Resolution Wallpapers**: Click event to jump directly to Unsplash page for downloading high-resolution original image.
 
 ### Configuration
 
@@ -38,6 +38,13 @@ Brings you three beautiful, themed photography works at three fixed times every 
     Paste the copied Access Key into the `access_key` configuration field of this plugin.
 
 ### Changelog
+
+#### v0.2.0
+
+- **Breaking Change**: Simplified from 3 photos to 1 photo per day
+- Changed display from specific time slots (10 AM, 1 PM, 6 PM) to all-day event at 0:00
+- Now fetches popular photos instead of themed random photos
+- Improved caching mechanism for better performance
 
 #### v0.1.0
 
