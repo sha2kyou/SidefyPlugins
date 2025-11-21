@@ -6,13 +6,13 @@ This plugin allows you to monitor any webpage and extract specific information u
 
 | Parameter | Type | Default | Description | Example |
 | :--- | :--- | :--- | :--- | :--- |
-| **Target URL** | string |  | The full URL of the webpage you want to monitor. | `https://news.ycombinator.com/` |
-| **AI Prompt** | textarea |  | Instructions for AI: What information to extract. | `Summarize the top 3 news headlines.` |
-| **Update Interval** | number | `6` | How often (in hours) the plugin should check the webpage. | `1` |
+| `url` | string |  | The full URL of the webpage you want to monitor. | `https://news.ycombinator.com/` |
+| `prompt` | string |  | Instructions for AI: What information to extract. | `Summarize the top 3 news headlines.` |
+| `interval` | number | `6` | How often (in hours) the plugin should check the webpage. | `1` |
 
 ## Examples
 
-| Scenario | Target URL | AI Prompt |
+| Scenario | `url` | `prompt` |
 | :--- | :--- | :--- |
 | **News Summary** | `https://news.ycombinator.com/` | `Summarize the top 3 news headlines.` |
 | **Price Monitor** | `[Product Page URL]` | `Check if the price is below $50. If yes, say 'Price Drop!', otherwise say 'No change'.` |
