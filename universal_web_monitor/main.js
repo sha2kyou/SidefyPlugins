@@ -72,6 +72,22 @@ function fetchEvents(config) {
 
         // 3. Create Event
         var now = new Date();
+        
+        // Determine color based on keywords
+        var color = "#2980B9"; // Default Blue
+        var keywords = config.keywords || "";
+        
+        if (keywords && keywords.trim() !== "") {
+            var keywordList = keywords.split(",").map(function(k) { return k.trim().toLowerCase(); });
+            var contentLower = (eventTitle + " " + eventContent).toLowerCase();
+            
+            for (var i = 0; i < keywordList.length; i++) {
+                if (keywordList[i] && contentLower.includes(keywordList[i])) {
+                    color = "#8E44AD"; // Purple if keyword found
+                    break;
+                }
+            }
+        }
 
         events.push({
             title: eventTitle,
@@ -80,7 +96,7 @@ function fetchEvents(config) {
             isAllDay: true,
             isPointInTime: false,
             notes: eventContent,
-            color: "#8E44AD", // Purple color for generic monitor
+            color: color,
             href: "popup://?title=" + encodeURIComponent(eventTitle) + "&content=" + encodeURIComponent(eventContent),
             imageURL: null 
         });
